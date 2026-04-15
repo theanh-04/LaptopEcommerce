@@ -1,0 +1,139 @@
+@extends('layouts.app')
+
+@section('title', 'Thanh toán - NEON KINETIC')
+
+@section('content')
+<main class="max-w-screen-2xl mx-auto px-6 py-12 lg:px-12">
+    <!-- Header Section -->
+    <header class="mb-16">
+        <h1 class="text-5xl md:text-7xl font-headline font-black tracking-tighter text-white mb-6">
+            THANH <span class="text-primary italic">TOÁN</span>
+        </h1>
+        <p class="text-white/50 font-body text-lg max-w-2xl leading-relaxed">
+            Hoàn tất thông tin để nhận được trải nghiệm công nghệ đỉnh cao ngay tại nhà bạn.
+        </p>
+    </header>
+
+    <form action="{{ route('order.store') }}" method="POST">
+        @csrf
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
+            <!-- Form Area -->
+            <div class="lg:col-span-7">
+                <div class="bg-[#131313] rounded-2xl p-10 border border-white/5">
+                    <h2 class="text-2xl font-headline font-black tracking-tight text-white mb-8 flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary">person</span>
+                        THÔNG TIN KHÁCH HÀNG
+                    </h2>
+
+                    <div class="space-y-6">
+                        <div>
+                            <label class="text-[10px] text-white/50 font-label uppercase tracking-[0.2em] block mb-3">Họ và tên *</label>
+                            <input type="text" name="customer_name" required class="w-full bg-[#0e0e0e] border border-white/10 rounded-xl px-6 py-4 text-white focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all @error('customer_name') border-error @enderror" placeholder="Nguyễn Văn A">
+                            @error('customer_name')
+                                <p class="text-error text-xs mt-2">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="text-[10px] text-white/50 font-label uppercase tracking-[0.2em] block mb-3">Email *</label>
+                                <input type="email" name="customer_email" required class="w-full bg-[#0e0e0e] border border-white/10 rounded-xl px-6 py-4 text-white focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all @error('customer_email') border-error @enderror" placeholder="email@example.com">
+                                @error('customer_email')
+                                    <p class="text-error text-xs mt-2">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label class="text-[10px] text-white/50 font-label uppercase tracking-[0.2em] block mb-3">Số điện thoại *</label>
+                                <input type="tel" name="customer_phone" required class="w-full bg-[#0e0e0e] border border-white/10 rounded-xl px-6 py-4 text-white focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all @error('customer_phone') border-error @enderror" placeholder="0912345678">
+                                @error('customer_phone')
+                                    <p class="text-error text-xs mt-2">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="text-[10px] text-white/50 font-label uppercase tracking-[0.2em] block mb-3">Địa chỉ giao hàng *</label>
+                            <textarea name="customer_address" required rows="4" class="w-full bg-[#0e0e0e] border border-white/10 rounded-xl px-6 py-4 text-white focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all @error('customer_address') border-error @enderror" placeholder="Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành phố"></textarea>
+                            @error('customer_address')
+                                <p class="text-error text-xs mt-2">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Method -->
+                <div class="bg-[#131313] rounded-2xl p-10 border border-white/5 mt-8">
+                    <h2 class="text-2xl font-headline font-black tracking-tight text-white mb-8 flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary">payment</span>
+                        PHƯƠNG THỨC THANH TOÁN
+                    </h2>
+
+                    <div class="space-y-4">
+                        <label class="flex items-center gap-4 p-6 bg-[#0e0e0e] border-2 border-primary rounded-xl cursor-pointer">
+                            <input type="radio" name="payment" value="cod" checked class="w-5 h-5 text-primary">
+                            <div class="flex-1">
+                                <div class="font-bold text-white">Thanh toán khi nhận hàng (COD)</div>
+                                <div class="text-sm text-white/50">Thanh toán bằng tiền mặt khi nhận hàng</div>
+                            </div>
+                        </label>
+
+                        <label class="flex items-center gap-4 p-6 bg-[#0e0e0e] border border-white/10 rounded-xl cursor-pointer hover:border-primary/50 transition-colors">
+                            <input type="radio" name="payment" value="bank" class="w-5 h-5 text-primary">
+                            <div class="flex-1">
+                                <div class="font-bold text-white">Chuyển khoản ngân hàng</div>
+                                <div class="text-sm text-white/50">Chuyển khoản trước khi giao hàng</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="lg:col-span-5">
+                <div class="bg-[#131313] rounded-2xl p-10 border border-white/5 sticky top-32">
+                    <h2 class="text-2xl font-headline font-black tracking-tight text-white mb-8">
+                        ĐƠN HÀNG CỦA BẠN
+                    </h2>
+
+                    <div class="space-y-6 mb-8">
+                        @php $total = 0; @endphp
+                        @foreach($cart as $id => $item)
+                            @php $total += $item['price'] * $item['quantity']; @endphp
+                            <div class="flex gap-4 pb-6 border-b border-white/5">
+                                <img src="{{ $item['image'] ?? 'https://via.placeholder.com/100x100?text=Laptop' }}" alt="{{ $item['name'] }}" class="w-20 h-20 object-cover rounded-lg">
+                                <div class="flex-1">
+                                    <h3 class="font-bold text-white text-sm">{{ $item['name'] }}</h3>
+                                    <p class="text-white/50 text-xs mt-1">Số lượng: {{ $item['quantity'] }}</p>
+                                    <p class="text-secondary font-bold mt-2">{{ number_format($item['price'] * $item['quantity'], 0, ',', '.') }}₫</p>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <div class="space-y-4 mb-8 pb-8 border-b border-white/5">
+                        <div class="flex justify-between text-white/70">
+                            <span>Tạm tính</span>
+                            <span class="font-bold">{{ number_format($total, 0, ',', '.') }}₫</span>
+                        </div>
+                        <div class="flex justify-between text-white/70">
+                            <span>Phí vận chuyển</span>
+                            <span class="text-primary font-bold">MIỄN PHÍ</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center mb-8">
+                        <span class="text-white font-headline font-bold text-lg">Tổng cộng</span>
+                        <span class="text-4xl font-headline font-black text-secondary">{{ number_format($total, 0, ',', '.') }}₫</span>
+                    </div>
+
+                    <button type="submit" class="w-full bg-secondary text-white font-headline font-black py-6 rounded-2xl flex items-center justify-center gap-4 transition-all duration-500 hover:scale-[1.03] hover:brightness-110 active:scale-95 shadow-[0_0_30px_rgba(255,117,36,0.4)]">
+                        <span class="text-lg">XÁC NHẬN ĐẶT HÀNG</span>
+                        <span class="material-symbols-outlined">check_circle</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</main>
+@endsection
