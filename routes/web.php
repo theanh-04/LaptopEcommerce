@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LaptopController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\AdminController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -18,3 +19,9 @@ Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('car
 Route::get('/checkout', [OrderController::class, 'checkout'])->name('order.checkout');
 Route::post('/order', [OrderController::class, 'store'])->name('order.store');
 Route::get('/order/success', [OrderController::class, 'success'])->name('order.success');
+
+// Admin Routes
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/employees', [AdminController::class, 'employees'])->name('employees');
+});
