@@ -24,4 +24,7 @@ Route::get('/order/success', [OrderController::class, 'success'])->name('order.s
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/employees', [AdminController::class, 'employees'])->name('employees');
+    Route::get('/orders', [AdminController::class, 'orders'])->name('orders');
+    Route::get('/inventory', [AdminController::class, 'inventory'])->name('inventory');
+    Route::get('/pos', [AdminController::class, 'pos'])->name('pos');
 });
