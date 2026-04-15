@@ -16,8 +16,8 @@
             <span class="material-symbols-outlined group-hover:translate-x-1 duration-200">dashboard</span>
             <span class="text-sm">Dashboard</span>
         </a>
-        <a class="flex items-center gap-4 px-4 py-3 {{ request()->routeIs('admin.laptops*') ? 'text-orange-500 font-bold border-r-2 border-orange-500 bg-neutral-900/30' : 'text-neutral-500 hover:bg-neutral-900/50 hover:text-white' }} transition-all group" href="#">
-            <span class="material-symbols-outlined group-hover:translate-x-1 duration-200">inventory_2</span>
+        <a class="flex items-center gap-4 px-4 py-3 {{ request()->routeIs('admin.inventory*') ? 'text-orange-500 font-bold border-r-2 border-orange-500 bg-neutral-900/30' : 'text-neutral-500 hover:bg-neutral-900/50 hover:text-white' }} transition-all group" href="{{ route('admin.inventory') }}">
+            <span class="material-symbols-outlined group-hover:translate-x-1 duration-200" style="font-variation-settings: {{ request()->routeIs('admin.inventory*') ? "'FILL' 1" : "'FILL' 0" }};">inventory_2</span>
             <span class="text-sm">Inventory</span>
         </a>
         <a class="flex items-center gap-4 px-4 py-3 {{ request()->routeIs('admin.employees*') ? 'text-orange-500 font-bold border-r-2 border-orange-500 bg-neutral-900/30' : 'text-neutral-500 hover:bg-neutral-900/50 hover:text-white' }} transition-all group" href="{{ route('admin.employees') }}">
@@ -28,8 +28,12 @@
             <span class="material-symbols-outlined group-hover:translate-x-1 duration-200">payments</span>
             <span class="text-sm">Sales</span>
         </a>
-        <a class="flex items-center gap-4 px-4 py-3 {{ request()->routeIs('admin.orders*') ? 'text-orange-500 font-bold border-r-2 border-orange-500 bg-neutral-900/30' : 'text-neutral-500 hover:bg-neutral-900/50 hover:text-white' }} transition-all group" href="#">
-            <span class="material-symbols-outlined group-hover:translate-x-1 duration-200">shopping_cart</span>
+        <a class="flex items-center gap-4 px-4 py-3 {{ request()->routeIs('admin.pos*') ? 'text-orange-500 font-bold border-r-2 border-orange-500 bg-neutral-900/30' : 'text-neutral-500 hover:bg-neutral-900/50 hover:text-white' }} transition-all group" href="{{ route('admin.pos') }}">
+            <span class="material-symbols-outlined group-hover:translate-x-1 duration-200" style="font-variation-settings: {{ request()->routeIs('admin.pos*') ? "'FILL' 1" : "'FILL' 0" }};">point_of_sale</span>
+            <span class="text-sm">POS</span>
+        </a>
+        <a class="flex items-center gap-4 px-4 py-3 {{ request()->routeIs('admin.orders*') ? 'text-orange-500 font-bold border-r-2 border-orange-500 bg-neutral-900/30' : 'text-neutral-500 hover:bg-neutral-900/50 hover:text-white' }} transition-all group" href="{{ route('admin.orders') }}">
+            <span class="material-symbols-outlined group-hover:translate-x-1 duration-200" style="font-variation-settings: {{ request()->routeIs('admin.orders*') ? "'FILL' 1" : "'FILL' 0" }};">shopping_cart</span>
             <span class="text-sm">Orders</span>
         </a>
         <a class="flex items-center gap-4 px-4 py-3 text-neutral-500 hover:bg-neutral-900/50 hover:text-white transition-all group" href="#">
