@@ -10,7 +10,7 @@ class Laptop extends Model
     protected $fillable = [
         'category_id', 'name', 'slug', 'description', 'brand',
         'processor', 'ram', 'storage', 'display', 'graphics',
-        'price', 'stock', 'image'
+        'price', 'stock', 'image', 'sku'
     ];
 
     public function category(): BelongsTo

@@ -25,6 +25,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/employees', [AdminController::class, 'employees'])->name('employees');
     Route::get('/orders', [AdminController::class, 'orders'])->name('orders');
+    Route::post('/orders/{id}/status', [AdminController::class, 'updateOrderStatus'])->name('orders.updateStatus');
     Route::get('/inventory', [AdminController::class, 'inventory'])->name('inventory');
+    Route::post('/inventory/{id}/stock', [AdminController::class, 'updateStock'])->name('inventory.updateStock');
     Route::get('/pos', [AdminController::class, 'pos'])->name('pos');
+    Route::post('/pos/payment', [AdminController::class, 'processPayment'])->name('pos.payment');
 });
