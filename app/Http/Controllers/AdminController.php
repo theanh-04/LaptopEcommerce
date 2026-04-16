@@ -176,6 +176,106 @@ class AdminController extends Controller
         return response()->json($employees);
     }
 
+    // Promotions Management
+    public function promotions()
+    {
+        $promotions = \App\Models\Promotion::orderBy('created_at', 'desc')->get();
+        
+        $activeCount = $promotions->where('is_active', true)->count();
+        $expiredCount = $promotions->filter(function($promo) {
+            return $promo->end_date->isPast();
+        })->count();
+        $totalUsage = $promotions->sum('used_count');
+        
+        return view('admin.promotions.index', compact('promotions', 'activeCount', 'expiredCount', 'totalUsage'));
+    }
+
+    public function promotionsCreate()
+    {
+        return view('admin.promotions.form');
+    }
+
+    public function promotionsStore(Request $request)
+    {
+        $request->validate([
+            'code' => 'required|string|max:50|unique:promotions,code',
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'type' => 'required|in:percentage,fixed',
+            'value' => 'required|numeric|min:0',
+            'min_order_amount' => 'required|numeric|min:0',
+            'max_discount' => 'nullable|numeric|min:0',
+            'usage_limit' => 'nullable|integer|min:1',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after:start_date',
+        ]);
+
+        $data = $request->all();
+        $data['code'] = strtoupper($data['code']);
+        $data['is_active'] = $request->has('is_active');
+        $data['used_count'] = 0;
+
+        \App\Models\Promotion::create($data);
+
+        return redirect()->route('admin.promotions')->with('success', 'Thêm khuyến mãi thành công!');
+    }
+
+    public function promotionsEdit($id)
+    {
+        $promotion = \App\Models\Promotion::findOrFail($id);
+        return view('admin.promotions.form', compact('promotion'));
+    }
+
+    public function promotionsUpdate(Request $request, $id)
+    {
+        $promotion = \App\Models\Promotion::findOrFail($id);
+
+        $request->validate([
+            'code' => 'required|string|max:50|unique:promotions,code,' . $id,
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'type' => 'required|in:percentage,fixed',
+            'value' => 'required|numeric|min:0',
+            'min_order_amount' => 'required|numeric|min:0',
+            'max_discount' => 'nullable|numeric|min:0',
+            'usage_limit' => 'nullable|integer|min:1',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after:start_date',
+        ]);
+
+        $data = $request->all();
+        $data['code'] = strtoupper($data['code']);
+        $data['is_active'] = $request->has('is_active');
+
+        $promotion->update($data);
+
+        return redirect()->route('admin.promotions')->with('success', 'Cập nhật khuyến mãi thành công!');
+    }
+
+    public function promotionsDelete($id)
+    {
+        $promotion = \App\Models\Promotion::findOrFail($id);
+        $promotion->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Xóa khuyến mãi thành công'
+        ]);
+    }
+
+    public function promotionsToggle($id)
+    {
+        $promotion = \App\Models\Promotion::findOrFail($id);
+        $promotion->is_active = !$promotion->is_active;
+        $promotion->save();
+
+        return response()->json([
+            'success' => true,
+            'is_active' => $promotion->is_active,
+            'message' => $promotion->is_active ? 'Đã kích hoạt' : 'Đã tắt'
+        ]);
+    }
+
     public function orders()
     {
         $pendingOrders = Order::where('status', 'pending')
@@ -522,10 +622,58 @@ class AdminController extends Controller
             $laptop->decrement('stock', $item['quantity']);
         }
 
+        // Update promotion usage if applied
+        if ($request->promo_code) {
+            $promotion = \App\Models\Promotion::where('code', $request->promo_code)->first();
+            if ($promotion) {
+                $promotion->increment('used_count');
+            }
+        }
+
         return response()->json([
             'success' => true,
             'message' => 'Thanh toán thành công',
             'order_number' => $order->order_number
+        ]);
+    }
+
+    public function applyPromoCode(Request $request)
+    {
+        $code = strtoupper($request->code);
+        $subtotal = $request->subtotal;
+
+        $promotion = \App\Models\Promotion::where('code', $code)->first();
+
+        if (!$promotion) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Mã khuyến mãi không tồn tại'
+            ]);
+        }
+
+        if (!$promotion->isValid()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Mã khuyến mãi không còn hiệu lực'
+            ]);
+        }
+
+        if ($subtotal < $promotion->min_order_amount) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Đơn hàng tối thiểu ' . number_format($promotion->min_order_amount) . '₫'
+            ]);
+        }
+
+        $discount = $promotion->calculateDiscount($subtotal);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Áp dụng mã thành công!',
+            'promo' => [
+                'code' => $promotion->code,
+                'discount' => $discount
+            ]
         ]);
     }
 
