@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Laptop;
 use App\Models\Order;
+use App\Models\Brand;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
@@ -14,7 +16,7 @@ class AdminController extends Controller
             ->take(4)
             ->get();
 
-        return view('admin.dashboard', compact('featuredLaptops'));
+        return view('admin.dashboard.index', compact('featuredLaptops'));
     }
 
     public function employees()
@@ -51,150 +53,481 @@ class AdminController extends Controller
             ],
         ]);
 
-        return view('admin.employees', compact('employees'));
+        return view('admin.employees.index', compact('employees'));
     }
 
     public function orders()
     {
-        // Sample orders data
-        $pendingOrders = collect([
-            (object)[
-                'order_number' => 'NK-2049-01',
-                'customer_name' => 'Nguyễn Văn A',
-                'items_count' => 1,
-                'total' => 109990000
-            ],
-            (object)[
-                'order_number' => 'NK-2049-05',
-                'customer_name' => 'Lê Thị B',
-                'items_count' => 2,
-                'total' => 149990000
-            ],
-        ]);
+        $pendingOrders = Order::where('status', 'pending')
+            ->with('orderItems.laptop')
+            ->get()
+            ->map(function($order) {
+                return (object)[
+                    'id' => $order->id,
+                    'order_number' => $order->order_number ?? 'NK-' . str_pad($order->id, 6, '0', STR_PAD_LEFT),
+                    'customer_name' => $order->customer_name,
+                    'customer_email' => $order->customer_email,
+                    'customer_phone' => $order->customer_phone,
+                    'items_count' => $order->orderItems->sum('quantity'),
+                    'total' => $order->total_amount,
+                    'status' => $order->status
+                ];
+            });
 
-        $processingOrders = collect([
-            (object)[
-                'order_number' => 'NK-2048-92',
-                'customer_name' => 'Trần Văn C',
-                'items_count' => 1,
-                'total' => 39990000
-            ],
-        ]);
+        $processingOrders = Order::where('status', 'processing')
+            ->with('orderItems.laptop')
+            ->get()
+            ->map(function($order) {
+                return (object)[
+                    'id' => $order->id,
+                    'order_number' => $order->order_number ?? 'NK-' . str_pad($order->id, 6, '0', STR_PAD_LEFT),
+                    'customer_name' => $order->customer_name,
+                    'customer_email' => $order->customer_email,
+                    'customer_phone' => $order->customer_phone,
+                    'items_count' => $order->orderItems->sum('quantity'),
+                    'total' => $order->total_amount,
+                    'status' => $order->status
+                ];
+            });
 
-        $shippedOrders = collect([
-            (object)[
-                'order_number' => 'NK-2048-80',
-                'customer_name' => 'Hoàng Văn D',
-                'items_count' => 1,
-                'total' => 45500000,
-                'completed_at' => '12/10/2023'
-            ],
-        ]);
+        $shippedOrders = Order::where('status', 'completed')
+            ->with('orderItems.laptop')
+            ->latest()
+            ->take(10)
+            ->get()
+            ->map(function($order) {
+                return (object)[
+                    'id' => $order->id,
+                    'order_number' => $order->order_number ?? 'NK-' . str_pad($order->id, 6, '0', STR_PAD_LEFT),
+                    'customer_name' => $order->customer_name,
+                    'customer_email' => $order->customer_email,
+                    'customer_phone' => $order->customer_phone,
+                    'items_count' => $order->orderItems->sum('quantity'),
+                    'total' => $order->total_amount,
+                    'status' => $order->status,
+                    'completed_at' => $order->updated_at->format('d/m/Y')
+                ];
+            });
 
-        return view('admin.orders', compact('pendingOrders', 'processingOrders', 'shippedOrders'));
+        return view('admin.orders.index', compact('pendingOrders', 'processingOrders', 'shippedOrders'));
+    }
+
+    public function updateOrderStatus(Request $request, $id)
+    {
+        $order = Order::with('orderItems')->findOrFail($id);
+        $oldStatus = $order->status;
+        $newStatus = $request->status;
+        
+        // Validate status transition
+        $validTransitions = [
+            'pending' => ['processing', 'cancelled'],
+            'processing' => ['completed', 'cancelled'],
+            'completed' => [], // Cannot change from completed
+            'cancelled' => [] // Cannot change from cancelled
+        ];
+        
+        if (!in_array($newStatus, $validTransitions[$oldStatus] ?? [])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Không thể chuyển trạng thái này'
+            ]);
+        }
+        
+        // Handle stock changes
+        if ($newStatus === 'processing' && $oldStatus === 'pending') {
+            // Deduct stock when moving to processing
+            foreach ($order->orderItems as $item) {
+                $laptop = Laptop::find($item->laptop_id);
+                if ($laptop->stock < $item->quantity) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => "Không đủ hàng trong kho cho sản phẩm: {$laptop->name}"
+                    ]);
+                }
+                $laptop->decrement('stock', $item->quantity);
+            }
+        } elseif ($newStatus === 'cancelled') {
+            // Restore stock when cancelling
+            if ($oldStatus === 'processing' || $oldStatus === 'completed') {
+                foreach ($order->orderItems as $item) {
+                    $laptop = Laptop::find($item->laptop_id);
+                    $laptop->increment('stock', $item->quantity);
+                }
+            }
+        }
+        
+        $order->status = $newStatus;
+        $order->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Cập nhật trạng thái thành công'
+        ]);
     }
 
     public function inventory()
     {
-        // Sample inventory data
-        $products = collect([
-            (object)[
-                'name' => 'MacBook Pro 16" M3 Max',
-                'sku' => 'APP-MBP-16-M3',
-                'brand' => 'Apple',
-                'stock' => 84,
-                'price' => 79990000,
-                'image' => null
-            ],
-            (object)[
-                'name' => 'ROG Zephyrus G14 2024',
-                'sku' => 'ASUS-ROG-Z14',
-                'brand' => 'ASUS',
-                'stock' => 8,
-                'price' => 45500000,
-                'image' => null
-            ],
-            (object)[
-                'name' => 'MSI Titan GT77 HX',
-                'sku' => 'MSI-TT-GT77',
-                'brand' => 'MSI',
-                'stock' => 42,
-                'price' => 120000000,
-                'image' => null
-            ],
-            (object)[
-                'name' => 'Razer Blade 14 QHD+',
-                'sku' => 'RAZ-BL-14-G4',
-                'brand' => 'Razer',
-                'stock' => 0,
-                'price' => 52990000,
-                'image' => null
-            ],
+        $products = Laptop::with('category')->get()->map(function($laptop) {
+            return (object)[
+                'id' => $laptop->id,
+                'name' => $laptop->name,
+                'sku' => $laptop->sku ?? 'SKU-' . str_pad($laptop->id, 6, '0', STR_PAD_LEFT),
+                'brand' => $laptop->brand,
+                'stock' => $laptop->stock,
+                'price' => $laptop->price,
+                'image' => $laptop->image
+            ];
+        });
+
+        $totalProducts = Laptop::count();
+        $lowStockCount = Laptop::where('stock', '<', 10)->count();
+        $brands = \App\Models\Brand::where('is_active', true)
+            ->orderBy('display_order')
+            ->get();
+
+        return view('admin.inventory.index', compact('products', 'totalProducts', 'lowStockCount', 'brands'));
+    }
+
+    public function updateStock(Request $request, $id)
+    {
+        $laptop = Laptop::findOrFail($id);
+        $laptop->stock = $request->stock;
+        $laptop->save();
+
+        return response()->json(['success' => true, 'message' => 'Cập nhật tồn kho thành công']);
+    }
+
+    public function createProduct()
+    {
+        $categories = \App\Models\Category::all();
+        $brands = Brand::where('is_active', true)->orderBy('display_order')->get();
+        return view('admin.inventory.create', compact('categories', 'brands'));
+    }
+
+    public function storeProduct(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
+            'brand' => 'required|string',
+            'processor' => 'required|string',
+            'ram' => 'required|string',
+            'storage' => 'required|string',
+            'display' => 'required|string',
+            'price' => 'required|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+            'description' => 'required|string',
+            'image' => 'nullable|image|max:2048'
         ]);
 
-        $totalProducts = 1284;
-        $lowStockCount = 12;
+        $data = $request->all();
+        $data['slug'] = Str::slug($request->name);
+        
+        // Generate SKU
+        $brandPrefix = strtoupper(substr($request->brand, 0, 3));
+        $data['sku'] = $brandPrefix . '-' . str_pad(Laptop::count() + 1, 6, '0', STR_PAD_LEFT);
 
-        return view('admin.inventory', compact('products', 'totalProducts', 'lowStockCount'));
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('laptops', 'public');
+            $data['image'] = $imagePath;
+        }
+
+        Laptop::create($data);
+
+        return redirect()->route('admin.inventory')->with('success', 'Thêm sản phẩm thành công!');
+    }
+
+    public function editProduct($id)
+    {
+        $laptop = Laptop::findOrFail($id);
+        $categories = \App\Models\Category::all();
+        $brands = Brand::where('is_active', true)->orderBy('display_order')->get();
+        return view('admin.inventory.edit', compact('laptop', 'categories', 'brands'));
+    }
+
+    public function updateProduct(Request $request, $id)
+    {
+        $laptop = Laptop::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
+            'brand' => 'required|string',
+            'processor' => 'required|string',
+            'ram' => 'required|string',
+            'storage' => 'required|string',
+            'display' => 'required|string',
+            'price' => 'required|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+            'description' => 'required|string',
+            'image' => 'nullable|image|max:2048'
+        ]);
+
+        $data = $request->all();
+        $data['slug'] = Str::slug($request->name);
+
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            // Delete old image
+            if ($laptop->image && \Storage::disk('public')->exists($laptop->image)) {
+                \Storage::disk('public')->delete($laptop->image);
+            }
+            $imagePath = $request->file('image')->store('laptops', 'public');
+            $data['image'] = $imagePath;
+        }
+
+        $laptop->update($data);
+
+        return redirect()->route('admin.inventory')->with('success', 'Cập nhật sản phẩm thành công!');
+    }
+
+    public function deleteProduct($id)
+    {
+        $laptop = Laptop::findOrFail($id);
+        
+        // Delete image
+        if ($laptop->image && \Storage::disk('public')->exists($laptop->image)) {
+            \Storage::disk('public')->delete($laptop->image);
+        }
+
+        $laptop->delete();
+
+        return response()->json(['success' => true, 'message' => 'Xóa sản phẩm thành công']);
+    }
+
+    public function filterInventory(Request $request)
+    {
+        $query = Laptop::with('category');
+
+        // Filter by brand
+        if ($request->has('brand') && $request->brand != 'all') {
+            $query->where('brand', $request->brand);
+        }
+
+        // Filter by stock status
+        if ($request->has('stock_status')) {
+            switch ($request->stock_status) {
+                case 'in_stock':
+                    $query->where('stock', '>=', 10);
+                    break;
+                case 'low_stock':
+                    $query->where('stock', '>', 0)->where('stock', '<', 10);
+                    break;
+                case 'out_of_stock':
+                    $query->where('stock', 0);
+                    break;
+            }
+        }
+
+        // Search
+        if ($request->has('search') && $request->search) {
+            $query->where(function($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                  ->orWhere('sku', 'like', '%' . $request->search . '%')
+                  ->orWhere('brand', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        $products = $query->get()->map(function($laptop) {
+            return [
+                'id' => $laptop->id,
+                'name' => $laptop->name,
+                'sku' => $laptop->sku ?? 'SKU-' . str_pad($laptop->id, 6, '0', STR_PAD_LEFT),
+                'brand' => $laptop->brand,
+                'stock' => $laptop->stock,
+                'price' => $laptop->price,
+                'image' => $laptop->image
+            ];
+        });
+
+        return response()->json($products);
     }
 
     public function pos()
     {
-        // Sample POS products
-        $products = collect([
-            (object)[
-                'id' => 1,
-                'name' => 'MacBook Pro M3 Max',
-                'description' => '16-inch, 128GB Unified Memory, 4TB SSD Space Black',
-                'price' => 109990000,
-                'image' => null,
-                'is_new' => true
-            ],
-            (object)[
-                'id' => 2,
-                'name' => 'ROG Zephyrus G16',
-                'description' => 'RTX 4090, Intel Core i9-14900HX, OLED 240Hz Display',
-                'price' => 89990000,
-                'image' => null,
-                'is_new' => false
-            ],
-            (object)[
-                'id' => 3,
-                'name' => 'Razer Blade 14',
-                'description' => 'Mercury White, Ryzen 9 8945HS, RTX 4070, 32GB RAM',
-                'price' => 69990000,
-                'image' => null,
-                'is_new' => false
-            ],
-            (object)[
-                'id' => 4,
-                'name' => 'Microsoft Surface Laptop 7',
-                'description' => 'Snapdragon X Elite, 32GB RAM, 1TB SSD, 14.5" PixelSense',
-                'price' => 51990000,
-                'image' => null,
-                'is_new' => false
-            ],
-            (object)[
-                'id' => 5,
-                'name' => 'Alienware m18 R2',
-                'description' => '18-inch Display, i9-14900HX, RTX 4080, 64GB RAM',
-                'price' => 99990000,
-                'image' => null,
-                'is_new' => false
-            ],
-            (object)[
-                'id' => 6,
-                'name' => 'Framework Laptop 16',
-                'description' => 'DIY Edition, Ryzen 7, Radeon RX 7700S, Fully Modular',
-                'price' => 56990000,
-                'image' => null,
-                'is_new' => false
-            ],
-        ]);
+        $categories = \App\Models\Category::withCount('laptops')->get();
+        
+        $products = Laptop::where('stock', '>', 0)
+            ->get()
+            ->map(function($laptop) {
+                return (object)[
+                    'id' => $laptop->id,
+                    'name' => $laptop->name,
+                    'description' => Str::limit($laptop->description, 100),
+                    'price' => $laptop->price,
+                    'image' => $laptop->image,
+                    'category_id' => $laptop->category_id,
+                    'is_new' => $laptop->created_at->diffInDays(now()) < 30
+                ];
+            });
 
         $cartItems = [];
         $subtotal = 0;
 
-        return view('admin.pos', compact('products', 'cartItems', 'subtotal'));
+        return view('admin.pos.index', compact('products', 'cartItems', 'subtotal', 'categories'));
+    }
+
+    public function processPayment(Request $request)
+    {
+        $request->validate([
+            'items' => 'required|array',
+            'customer_name' => 'required|string',
+            'customer_email' => 'required|email',
+            'customer_phone' => 'required|string',
+            'payment_method' => 'required|string'
+        ]);
+
+        // Create order
+        $order = Order::create([
+            'order_number' => 'NK-' . date('ymd') . '-' . str_pad(Order::count() + 1, 4, '0', STR_PAD_LEFT),
+            'customer_name' => $request->customer_name,
+            'customer_email' => $request->customer_email,
+            'customer_phone' => $request->customer_phone,
+            'customer_address' => $request->customer_address ?? 'POS Sale',
+            'total_amount' => $request->total,
+            'status' => 'completed'
+        ]);
+
+        // Create order items
+        foreach ($request->items as $item) {
+            $order->orderItems()->create([
+                'laptop_id' => $item['id'],
+                'quantity' => $item['quantity'],
+                'price' => $item['price']
+            ]);
+
+            // Update stock
+            $laptop = Laptop::find($item['id']);
+            $laptop->decrement('stock', $item['quantity']);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Thanh toán thành công',
+            'order_number' => $order->order_number
+        ]);
+    }
+
+    // Brand Management
+    public function brandsIndex()
+    {
+        $brands = Brand::withCount('laptops')->orderBy('display_order')->get();
+        return view('admin.brands.index', compact('brands'));
+    }
+
+    public function brandsCreate()
+    {
+        return view('admin.brands.form');
+    }
+
+    public function brandsStore(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255|unique:brands,name',
+            'slug' => 'nullable|string|max:255|unique:brands,slug',
+            'logo' => 'nullable|image|max:2048',
+            'display_order' => 'nullable|integer|min:0',
+            'is_active' => 'nullable|boolean'
+        ]);
+
+        $data = $request->all();
+        $data['slug'] = $request->slug ?: Str::slug($request->name);
+        $data['is_active'] = $request->has('is_active');
+
+        // Handle logo upload
+        if ($request->hasFile('logo')) {
+            $logoPath = $request->file('logo')->store('brands', 'public');
+            $data['logo'] = $logoPath;
+        }
+
+        Brand::create($data);
+
+        return redirect()->route('admin.brands.index')->with('success', 'Thêm thương hiệu thành công!');
+    }
+
+    public function brandsEdit($id)
+    {
+        $brand = Brand::findOrFail($id);
+        return view('admin.brands.form', compact('brand'));
+    }
+
+    public function brandsUpdate(Request $request, $id)
+    {
+        $brand = Brand::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|max:255|unique:brands,name,' . $id,
+            'slug' => 'nullable|string|max:255|unique:brands,slug,' . $id,
+            'logo' => 'nullable|image|max:2048',
+            'display_order' => 'nullable|integer|min:0',
+            'is_active' => 'nullable|boolean'
+        ]);
+
+        $data = $request->all();
+        $data['slug'] = $request->slug ?: Str::slug($request->name);
+        $data['is_active'] = $request->has('is_active');
+
+        // Handle logo upload
+        if ($request->hasFile('logo')) {
+            // Delete old logo
+            if ($brand->logo && \Storage::disk('public')->exists($brand->logo)) {
+                \Storage::disk('public')->delete($brand->logo);
+            }
+            $logoPath = $request->file('logo')->store('brands', 'public');
+            $data['logo'] = $logoPath;
+        }
+
+        $brand->update($data);
+
+        return redirect()->route('admin.brands.index')->with('success', 'Cập nhật thương hiệu thành công!');
+    }
+
+    public function brandsDelete($id)
+    {
+        $brand = Brand::findOrFail($id);
+        
+        // Check if brand has products
+        if ($brand->laptops()->count() > 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Không thể xóa thương hiệu đang có sản phẩm!'
+            ]);
+        }
+
+        // Delete logo
+        if ($brand->logo && \Storage::disk('public')->exists($brand->logo)) {
+            \Storage::disk('public')->delete($brand->logo);
+        }
+
+        $brand->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Xóa thương hiệu thành công'
+        ]);
+    }
+
+    public function getOrderDetail($id)
+    {
+        $order = Order::with('orderItems.laptop')->findOrFail($id);
+        
+        return response()->json([
+            'id' => $order->id,
+            'order_number' => $order->order_number,
+            'customer_name' => $order->customer_name,
+            'customer_email' => $order->customer_email,
+            'customer_phone' => $order->customer_phone,
+            'customer_address' => $order->customer_address,
+            'total_amount' => $order->total_amount,
+            'status' => $order->status,
+            'items' => $order->orderItems->map(function($item) {
+                return [
+                    'laptop_name' => $item->laptop->name,
+                    'quantity' => $item->quantity,
+                    'price' => $item->price
+                ];
+            })
+        ]);
     }
 }
