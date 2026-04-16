@@ -94,10 +94,26 @@
 
             <!-- Totals and Checkout -->
             <div class="p-6 bg-surface-container-high space-y-6">
+                <!-- Promotion Code -->
+                <div class="space-y-2">
+                    <label class="block text-xs text-cyan-400 uppercase font-bold">Mã khuyến mãi</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="promoCode" placeholder="Nhập mã..." class="flex-1 bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2 text-white text-sm focus:ring-1 focus:ring-cyan-400 focus:border-cyan-400 uppercase">
+                        <button onclick="applyPromoCode()" class="px-4 py-2 bg-primary/20 text-primary rounded-lg text-sm font-bold hover:bg-primary/30 transition-colors">
+                            Áp dụng
+                        </button>
+                    </div>
+                    <div id="promoMessage" class="text-xs hidden"></div>
+                </div>
+
                 <div class="space-y-2">
                     <div class="flex justify-between text-sm">
                         <span class="text-neutral-400">Tạm tính</span>
                         <span class="text-white font-medium" id="subtotal">0₫</span>
+                    </div>
+                    <div class="flex justify-between text-sm" id="discountRow" style="display: none;">
+                        <span class="text-green-400">Giảm giá (<span id="promoCodeDisplay"></span>)</span>
+                        <span class="text-green-400 font-medium" id="discount">0₫</span>
                     </div>
                     <div class="flex justify-between text-sm">
                         <span class="text-neutral-400">Thuế (8.5%)</span>
@@ -108,7 +124,7 @@
                         <span class="headline text-3xl font-black text-white" id="total">0₫</span>
                     </div>
                 </div>
-                <button onclick="openCheckoutModal()" class="w-full py-5 rounded-full bg-secondary text-on-secondary headline font-black text-lg shadow-[0_10px_30px_rgba(255,117,36,0.3)] hover:shadow-[0_15px_40px_rgba(255,117,36,0.5)] active:scale-95 transition-all uppercase tracking-tighter" id="checkoutBtn" disabled>
+                <button onclick="openCheckoutModal()" class="w-full py-5 rounded-full bg-secondary text-black headline font-black text-lg shadow-[0_10px_30px_rgba(255,117,36,0.3)] hover:shadow-[0_15px_40px_rgba(255,117,36,0.5)] active:scale-95 transition-all uppercase tracking-tighter" id="checkoutBtn" disabled>
                     Xử lý thanh toán
                 </button>
             </div>
@@ -158,6 +174,7 @@
 
     <script>
         let cart = [];
+        let appliedPromo = null;
 
         function addToCart(product) {
             const existingItem = cart.find(item => item.id === product.id);
@@ -197,7 +214,59 @@
             if (cart.length === 0) return;
             if (confirm('Bạn có chắc chắn muốn xóa toàn bộ giỏ hàng?')) {
                 cart = [];
+                appliedPromo = null;
+                document.getElementById('promoCode').value = '';
+                document.getElementById('promoMessage').classList.add('hidden');
+                document.getElementById('discountRow').style.display = 'none';
                 updateCart();
+            }
+        }
+
+        async function applyPromoCode() {
+            const code = document.getElementById('promoCode').value.trim().toUpperCase();
+            const messageEl = document.getElementById('promoMessage');
+            
+            if (!code) {
+                messageEl.textContent = 'Vui lòng nhập mã khuyến mãi';
+                messageEl.className = 'text-xs text-error';
+                messageEl.classList.remove('hidden');
+                return;
+            }
+
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+            try {
+                const response = await fetch('{{ route("admin.pos.applyPromo") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ code, subtotal })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    appliedPromo = result.promo;
+                    messageEl.textContent = result.message;
+                    messageEl.className = 'text-xs text-green-400';
+                    messageEl.classList.remove('hidden');
+                    document.getElementById('promoCodeDisplay').textContent = code;
+                    document.getElementById('discountRow').style.display = 'flex';
+                    updateTotals();
+                } else {
+                    appliedPromo = null;
+                    messageEl.textContent = result.message;
+                    messageEl.className = 'text-xs text-error';
+                    messageEl.classList.remove('hidden');
+                    document.getElementById('discountRow').style.display = 'none';
+                    updateTotals();
+                }
+            } catch (error) {
+                messageEl.textContent = 'Có lỗi xảy ra khi áp dụng mã';
+                messageEl.className = 'text-xs text-error';
+                messageEl.classList.remove('hidden');
             }
         }
 
@@ -252,10 +321,18 @@
 
         function updateTotals() {
             const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const tax = subtotal * 0.085;
-            const total = subtotal + tax;
+            let discount = 0;
+
+            if (appliedPromo) {
+                discount = appliedPromo.discount;
+            }
+
+            const afterDiscount = subtotal - discount;
+            const tax = afterDiscount * 0.085;
+            const total = afterDiscount + tax;
             
             document.getElementById('subtotal').textContent = formatPrice(subtotal) + '₫';
+            document.getElementById('discount').textContent = '-' + formatPrice(discount) + '₫';
             document.getElementById('tax').textContent = formatPrice(tax) + '₫';
             document.getElementById('total').textContent = formatPrice(total) + '₫';
         }
@@ -335,7 +412,9 @@
             
             const formData = new FormData(e.target);
             const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const total = subtotal * 1.085;
+            const discount = appliedPromo ? appliedPromo.discount : 0;
+            const afterDiscount = subtotal - discount;
+            const total = afterDiscount * 1.085;
             
             const data = {
                 items: cart,
@@ -344,6 +423,8 @@
                 customer_phone: formData.get('customer_phone'),
                 customer_address: formData.get('customer_address') || 'POS Sale',
                 payment_method: formData.get('payment_method'),
+                promo_code: appliedPromo ? appliedPromo.code : null,
+                discount: discount,
                 total: total
             };
             
@@ -362,6 +443,10 @@
                 if (result.success) {
                     alert('Thanh toán thành công! Mã đơn hàng: ' + result.order_number);
                     cart = [];
+                    appliedPromo = null;
+                    document.getElementById('promoCode').value = '';
+                    document.getElementById('promoMessage').classList.add('hidden');
+                    document.getElementById('discountRow').style.display = 'none';
                     updateCart();
                     closeCheckoutModal();
                     e.target.reset();

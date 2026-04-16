@@ -44,6 +44,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/inventory/filter', [AdminController::class, 'filterInventory'])->name('inventory.filter');
     Route::get('/pos', [AdminController::class, 'pos'])->name('pos');
     Route::post('/pos/payment', [AdminController::class, 'processPayment'])->name('pos.payment');
+    Route::post('/pos/apply-promo', [AdminController::class, 'applyPromoCode'])->name('pos.applyPromo');
     
     // Brand Management
     Route::get('/brands', [AdminController::class, 'brandsIndex'])->name('brands.index');
@@ -52,4 +53,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/brands/{id}/edit', [AdminController::class, 'brandsEdit'])->name('brands.edit');
     Route::put('/brands/{id}', [AdminController::class, 'brandsUpdate'])->name('brands.update');
     Route::delete('/brands/{id}', [AdminController::class, 'brandsDelete'])->name('brands.delete');
+    
+    // Promotions Management
+    Route::get('/promotions', [AdminController::class, 'promotions'])->name('promotions');
+    Route::get('/promotions/create', [AdminController::class, 'promotionsCreate'])->name('promotions.create');
+    Route::post('/promotions', [AdminController::class, 'promotionsStore'])->name('promotions.store');
+    Route::get('/promotions/{id}/edit', [AdminController::class, 'promotionsEdit'])->name('promotions.edit');
+    Route::put('/promotions/{id}', [AdminController::class, 'promotionsUpdate'])->name('promotions.update');
+    Route::delete('/promotions/{id}', [AdminController::class, 'promotionsDelete'])->name('promotions.delete');
+    Route::post('/promotions/{id}/toggle', [AdminController::class, 'promotionsToggle'])->name('promotions.toggle');
 });
