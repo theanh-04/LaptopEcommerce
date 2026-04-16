@@ -21,39 +21,159 @@ class AdminController extends Controller
 
     public function employees()
     {
-        // Sample employee data
-        $employees = collect([
-            (object)[
-                'name' => 'Alex Rivers',
-                'email' => 'alex.r@neonkinetic.io',
-                'position' => 'Senior Developer',
-                'is_online' => true,
-                'performance' => 92
-            ],
-            (object)[
-                'name' => 'Sarah Chen',
-                'email' => 's.chen@neonkinetic.io',
-                'position' => 'Order Manager',
-                'is_online' => true,
-                'performance' => 88
-            ],
-            (object)[
-                'name' => 'Marcus Wright',
-                'email' => 'm.wright@neonkinetic.io',
-                'position' => 'Support Lead',
-                'is_online' => false,
-                'performance' => 76
-            ],
-            (object)[
-                'name' => 'Julia Nova',
-                'email' => 'j.nova@neonkinetic.io',
-                'position' => 'Operations Director',
-                'is_online' => true,
-                'performance' => 95
-            ],
+        $employees = \App\Models\Employee::where('is_active', true)
+            ->withCount(['orders' => function($query) {
+                $query->whereIn('status', ['processing', 'completed']);
+            }])
+            ->orderBy('name')
+            ->get()
+            ->map(function($emp) {
+                return (object)[
+                    'id' => $emp->id,
+                    'name' => $emp->name,
+                    'email' => $emp->email,
+                    'phone' => $emp->phone,
+                    'position' => $emp->position,
+                    'department' => $emp->department,
+                    'hire_date' => $emp->hire_date->format('d/m/Y'),
+                    'salary' => $emp->salary,
+                    'is_online' => rand(0, 1) == 1,
+                    'orders_count' => $emp->orders_count
+                ];
+            });
+
+        $departments = \App\Models\Employee::where('is_active', true)
+            ->select('department')
+            ->distinct()
+            ->pluck('department');
+
+        $totalEmployees = $employees->count();
+        $onlineCount = $employees->where('is_online', true)->count();
+        $departmentCount = $departments->count();
+
+        return view('admin.employees.index', compact('employees', 'departments', 'totalEmployees', 'onlineCount', 'departmentCount'));
+    }
+
+    public function employeesCreate()
+    {
+        $departments = \App\Models\Employee::select('department')->distinct()->pluck('department');
+        return view('admin.employees.form', compact('departments'));
+    }
+
+    public function employeesStore(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:employees,email',
+            'phone' => 'nullable|string|max:20',
+            'position' => 'required|string|max:255',
+            'department' => 'required|string|max:255',
+            'hire_date' => 'required|date',
+            'salary' => 'nullable|numeric|min:0',
+            'address' => 'nullable|string',
+            'avatar' => 'nullable|image|max:2048'
         ]);
 
-        return view('admin.employees.index', compact('employees'));
+        $data = $request->all();
+        $data['is_active'] = true;
+
+        if ($request->hasFile('avatar')) {
+            $avatarPath = $request->file('avatar')->store('employees', 'public');
+            $data['avatar'] = $avatarPath;
+        }
+
+        \App\Models\Employee::create($data);
+
+        return redirect()->route('admin.employees')->with('success', 'Thêm nhân viên thành công!');
+    }
+
+    public function employeesEdit($id)
+    {
+        $employee = \App\Models\Employee::findOrFail($id);
+        $departments = \App\Models\Employee::select('department')->distinct()->pluck('department');
+        return view('admin.employees.form', compact('employee', 'departments'));
+    }
+
+    public function employeesUpdate(Request $request, $id)
+    {
+        $employee = \App\Models\Employee::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:employees,email,' . $id,
+            'phone' => 'nullable|string|max:20',
+            'position' => 'required|string|max:255',
+            'department' => 'required|string|max:255',
+            'hire_date' => 'required|date',
+            'salary' => 'nullable|numeric|min:0',
+            'address' => 'nullable|string',
+            'avatar' => 'nullable|image|max:2048'
+        ]);
+
+        $data = $request->all();
+
+        if ($request->hasFile('avatar')) {
+            if ($employee->avatar && \Storage::disk('public')->exists($employee->avatar)) {
+                \Storage::disk('public')->delete($employee->avatar);
+            }
+            $avatarPath = $request->file('avatar')->store('employees', 'public');
+            $data['avatar'] = $avatarPath;
+        }
+
+        $employee->update($data);
+
+        return redirect()->route('admin.employees')->with('success', 'Cập nhật nhân viên thành công!');
+    }
+
+    public function employeesDelete($id)
+    {
+        $employee = \App\Models\Employee::findOrFail($id);
+        
+        // Soft delete by setting is_active to false
+        $employee->update(['is_active' => false]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Xóa nhân viên thành công'
+        ]);
+    }
+
+    public function employeesSearch(Request $request)
+    {
+        $query = \App\Models\Employee::where('is_active', true);
+
+        // Search by name or email
+        if ($request->has('search') && $request->search) {
+            $query->where(function($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                  ->orWhere('email', 'like', '%' . $request->search . '%')
+                  ->orWhere('phone', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // Filter by department
+        if ($request->has('department') && $request->department != 'all') {
+            $query->where('department', $request->department);
+        }
+
+        $employees = $query->withCount(['orders' => function($q) {
+            $q->whereIn('status', ['processing', 'completed']);
+        }])->orderBy('name')->get()->map(function($emp) {
+            return [
+                'id' => $emp->id,
+                'name' => $emp->name,
+                'email' => $emp->email,
+                'phone' => $emp->phone,
+                'position' => $emp->position,
+                'department' => $emp->department,
+                'hire_date' => $emp->hire_date->format('d/m/Y'),
+                'salary' => $emp->salary,
+                'is_online' => rand(0, 1) == 1,
+                'orders_count' => $emp->orders_count
+            ];
+        });
+
+        return response()->json($employees);
     }
 
     public function orders()
