@@ -22,8 +22,15 @@ Route::get('/order/success', [OrderController::class, 'success'])->name('order.s
 
 // Admin Routes
 Route::prefix('admin')->name('admin.')->group(function () {
+    Route::redirect('/', '/admin/dashboard');
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/employees', [AdminController::class, 'employees'])->name('employees');
+    Route::get('/employees/create', [AdminController::class, 'employeesCreate'])->name('employees.create');
+    Route::post('/employees', [AdminController::class, 'employeesStore'])->name('employees.store');
+    Route::get('/employees/{id}/edit', [AdminController::class, 'employeesEdit'])->name('employees.edit');
+    Route::put('/employees/{id}', [AdminController::class, 'employeesUpdate'])->name('employees.update');
+    Route::delete('/employees/{id}', [AdminController::class, 'employeesDelete'])->name('employees.delete');
+    Route::get('/employees/search', [AdminController::class, 'employeesSearch'])->name('employees.search');
     Route::get('/orders', [AdminController::class, 'orders'])->name('orders');
     Route::get('/orders/{id}', [AdminController::class, 'getOrderDetail'])->name('orders.detail');
     Route::post('/orders/{id}/status', [AdminController::class, 'updateOrderStatus'])->name('orders.updateStatus');
