@@ -20,6 +20,10 @@
             <span class="material-symbols-outlined group-hover:translate-x-1 duration-200" style="font-variation-settings: {{ request()->routeIs('admin.inventory*') ? "'FILL' 1" : "'FILL' 0" }};">inventory_2</span>
             <span class="text-sm">Inventory</span>
         </a>
+        <a class="flex items-center gap-4 px-4 py-3 {{ request()->routeIs('admin.brands*') ? 'text-orange-500 font-bold border-r-2 border-orange-500 bg-neutral-900/30' : 'text-neutral-500 hover:bg-neutral-900/50 hover:text-white' }} transition-all group" href="{{ route('admin.brands.index') }}">
+            <span class="material-symbols-outlined group-hover:translate-x-1 duration-200" style="font-variation-settings: {{ request()->routeIs('admin.brands*') ? "'FILL' 1" : "'FILL' 0" }};">category</span>
+            <span class="text-sm">Brands</span>
+        </a>
         <a class="flex items-center gap-4 px-4 py-3 {{ request()->routeIs('admin.employees*') ? 'text-orange-500 font-bold border-r-2 border-orange-500 bg-neutral-900/30' : 'text-neutral-500 hover:bg-neutral-900/50 hover:text-white' }} transition-all group" href="{{ route('admin.employees') }}">
             <span class="material-symbols-outlined group-hover:translate-x-1 duration-200" style="font-variation-settings: {{ request()->routeIs('admin.employees*') ? "'FILL' 1" : "'FILL' 0" }};">badge</span>
             <span class="text-sm">Employees</span>

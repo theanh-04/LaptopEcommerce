@@ -11,18 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('laptops', function (Blueprint $table) {
-            $table->string('sku')->unique()->nullable()->after('id');
+        Schema::table('orders', function (Blueprint $table) {
+            $table->decimal('total_amount', 15, 2)->change();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::table('laptops', function (Blueprint $table) {
-            $table->dropColumn(['sku']);
+        Schema::table('orders', function (Blueprint $table) {
+            $table->decimal('total_amount', 10, 2)->change();
         });
     }
 };
