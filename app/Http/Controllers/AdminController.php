@@ -798,4 +798,127 @@ class AdminController extends Controller
             })
         ]);
     }
+
+    // Customer Management
+    public function customers()
+    {
+        $customers = \App\Models\Customer::where('is_active', true)
+            ->orderBy('total_spent', 'desc')
+            ->get();
+
+        $totalCustomers = $customers->count();
+        $activeCustomers = $customers->where('last_purchase_at', '>=', now()->subDays(30))->count();
+        $totalRevenue = $customers->sum('total_spent');
+        $avgOrderValue = $customers->where('total_orders', '>', 0)->avg('total_spent');
+
+        return view('admin.customers.index', compact('customers', 'totalCustomers', 'activeCustomers', 'totalRevenue', 'avgOrderValue'));
+    }
+
+    public function customersCreate()
+    {
+        return view('admin.customers.form');
+    }
+
+    public function customersStore(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:customers,email',
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string',
+            'date_of_birth' => 'nullable|date',
+            'gender' => 'nullable|in:male,female,other',
+            'notes' => 'nullable|string'
+        ]);
+
+        $data = $request->all();
+        $data['is_active'] = true;
+        $data['tier'] = 'bronze';
+        $data['loyalty_points'] = 0;
+        $data['total_spent'] = 0;
+        $data['total_orders'] = 0;
+
+        \App\Models\Customer::create($data);
+
+        return redirect()->route('admin.customers')->with('success', 'Thêm khách hàng thành công!');
+    }
+
+    public function customersEdit($id)
+    {
+        $customer = \App\Models\Customer::findOrFail($id);
+        return view('admin.customers.form', compact('customer'));
+    }
+
+    public function customersUpdate(Request $request, $id)
+    {
+        $customer = \App\Models\Customer::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:customers,email,' . $id,
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string',
+            'date_of_birth' => 'nullable|date',
+            'gender' => 'nullable|in:male,female,other',
+            'tier' => 'required|in:bronze,silver,gold,platinum',
+            'loyalty_points' => 'nullable|integer|min:0',
+            'notes' => 'nullable|string'
+        ]);
+
+        $customer->update($request->all());
+
+        return redirect()->route('admin.customers')->with('success', 'Cập nhật khách hàng thành công!');
+    }
+
+    public function customersDelete($id)
+    {
+        $customer = \App\Models\Customer::findOrFail($id);
+        $customer->update(['is_active' => false]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Xóa khách hàng thành công'
+        ]);
+    }
+
+    public function customersSearch(Request $request)
+    {
+        $query = \App\Models\Customer::where('is_active', true);
+
+        if ($request->has('search') && $request->search) {
+            $query->where(function($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                  ->orWhere('email', 'like', '%' . $request->search . '%')
+                  ->orWhere('phone', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        if ($request->has('tier') && $request->tier != 'all') {
+            $query->where('tier', $request->tier);
+        }
+
+        $customers = $query->orderBy('total_spent', 'desc')->get();
+
+        return response()->json($customers);
+    }
+
+    public function customersDetail($id)
+    {
+        $customer = \App\Models\Customer::with(['orders' => function($query) {
+            $query->orderBy('created_at', 'desc')->take(10);
+        }])->findOrFail($id);
+
+        return response()->json([
+            'customer' => $customer,
+            'orders' => $customer->orders->map(function($order) {
+                return [
+                    'id' => $order->id,
+                    'order_number' => $order->order_number ?? 'NK-' . str_pad($order->id, 6, '0', STR_PAD_LEFT),
+                    'total_amount' => $order->total_amount,
+                    'status' => $order->status,
+                    'created_at' => $order->created_at->format('d/m/Y H:i')
+                ];
+            })
+        ]);
+    }
 }

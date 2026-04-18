@@ -62,4 +62,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::put('/promotions/{id}', [AdminController::class, 'promotionsUpdate'])->name('promotions.update');
     Route::delete('/promotions/{id}', [AdminController::class, 'promotionsDelete'])->name('promotions.delete');
     Route::post('/promotions/{id}/toggle', [AdminController::class, 'promotionsToggle'])->name('promotions.toggle');
+    
+    // Customers Management
+    Route::get('/customers', [AdminController::class, 'customers'])->name('customers');
+    Route::get('/customers/create', [AdminController::class, 'customersCreate'])->name('customers.create');
+    Route::post('/customers', [AdminController::class, 'customersStore'])->name('customers.store');
+    Route::get('/customers/{id}/edit', [AdminController::class, 'customersEdit'])->name('customers.edit');
+    Route::put('/customers/{id}', [AdminController::class, 'customersUpdate'])->name('customers.update');
+    Route::delete('/customers/{id}', [AdminController::class, 'customersDelete'])->name('customers.delete');
+    Route::get('/customers/search', [AdminController::class, 'customersSearch'])->name('customers.search');
+    Route::get('/customers/{id}/detail', [AdminController::class, 'customersDetail'])->name('customers.detail');
 });
