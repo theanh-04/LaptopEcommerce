@@ -97,7 +97,7 @@
                                     <span class="material-symbols-outlined text-lg">person</span>
                                     <span class="text-sm">Tài khoản</span>
                                 </a>
-                                <a href="#" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-all text-white/80 hover:text-white">
+                                <a href="{{ route('order.myOrders') }}" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-all text-white/80 hover:text-white">
                                     <span class="material-symbols-outlined text-lg">receipt_long</span>
                                     <span class="text-sm">Đơn hàng</span>
                                 </a>

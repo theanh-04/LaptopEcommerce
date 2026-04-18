@@ -27,6 +27,8 @@ Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('car
 Route::get('/checkout', [OrderController::class, 'checkout'])->name('order.checkout');
 Route::post('/order', [OrderController::class, 'store'])->name('order.store');
 Route::get('/order/success', [OrderController::class, 'success'])->name('order.success');
+Route::post('/order/check-promo', [OrderController::class, 'checkPromo'])->name('order.checkPromo');
+Route::get('/my-orders', [OrderController::class, 'myOrders'])->name('order.myOrders');
 
 // Admin Routes
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
