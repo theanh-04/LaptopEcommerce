@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Laptop;
 use App\Models\Order;
 use App\Models\Brand;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -12,11 +13,89 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
-        $featuredLaptops = Laptop::orderBy('created_at', 'desc')
+        // Tổng doanh thu
+        $totalRevenue = Order::whereIn('status', ['processing', 'completed'])
+            ->sum('total_amount');
+
+        // Đơn hàng đang xử lý
+        $activeOrders = Order::where('status', 'pending')->count();
+        $urgentOrders = Order::where('status', 'pending')
+            ->whereDate('created_at', today())
+            ->count();
+
+        // Sản phẩm bán chạy nhất
+        $topProduct = \App\Models\OrderItem::select('laptop_id', \DB::raw('SUM(quantity) as total_sold'))
+            ->groupBy('laptop_id')
+            ->orderBy('total_sold', 'desc')
+            ->with('laptop')
+            ->first();
+
+        // Doanh thu 7 ngày gần nhất
+        $revenueChart = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i);
+            $revenue = Order::whereIn('status', ['processing', 'completed'])
+                ->whereDate('created_at', $date)
+                ->sum('total_amount');
+            $revenueChart[] = [
+                'date' => $date->format('d/m'),
+                'day' => $date->locale('vi')->isoFormat('dddd'),
+                'revenue' => $revenue
+            ];
+        }
+
+        // Hoạt động gần đây
+        $recentActivities = Order::with('orderItems.laptop')
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get()
+            ->map(function($order) {
+                return [
+                    'type' => 'order',
+                    'title' => 'Đơn hàng mới #' . $order->order_number,
+                    'description' => 'Khách hàng: ' . $order->customer_name . ' • ' . number_format($order->total_amount) . '₫',
+                    'time' => $order->created_at->diffForHumans(),
+                    'icon' => 'shopping_cart_checkout',
+                    'color' => 'primary'
+                ];
+            });
+
+        // Sản phẩm nổi bật
+        $featuredLaptops = Laptop::where('is_featured', true)
+            ->orderBy('created_at', 'desc')
             ->take(4)
             ->get();
 
-        return view('admin.dashboard.index', compact('featuredLaptops'));
+        // Nếu không đủ 4 sản phẩm featured, lấy thêm sản phẩm mới
+        if ($featuredLaptops->count() < 4) {
+            $additionalLaptops = Laptop::where('is_featured', false)
+                ->orderBy('created_at', 'desc')
+                ->take(4 - $featuredLaptops->count())
+                ->get();
+            $featuredLaptops = $featuredLaptops->merge($additionalLaptops);
+        }
+
+        // Tính % tăng trưởng doanh thu so với tuần trước
+        $lastWeekRevenue = Order::whereIn('status', ['processing', 'completed'])
+            ->whereBetween('created_at', [now()->subDays(14), now()->subDays(7)])
+            ->sum('total_amount');
+        $thisWeekRevenue = Order::whereIn('status', ['processing', 'completed'])
+            ->whereBetween('created_at', [now()->subDays(7), now()])
+            ->sum('total_amount');
+        $revenueGrowth = $lastWeekRevenue > 0 
+            ? round((($thisWeekRevenue - $lastWeekRevenue) / $lastWeekRevenue) * 100, 1)
+            : 0;
+
+        return view('admin.dashboard.index', compact(
+            'totalRevenue',
+            'activeOrders',
+            'urgentOrders',
+            'topProduct',
+            'revenueChart',
+            'recentActivities',
+            'featuredLaptops',
+            'revenueGrowth'
+        ));
     }
 
     public function employees()
@@ -923,4 +1002,98 @@ class AdminController extends Controller
             })
         ]);
     }
+
+    public function reports(Request $request)
+    {
+        $period = $request->get('period', 'week'); // week, month, year
+        
+        // Xác định khoảng thời gian
+        switch($period) {
+            case 'month':
+                $startDate = now()->subMonth();
+                $dateFormat = 'd/m';
+                break;
+            case 'year':
+                $startDate = now()->subYear();
+                $dateFormat = 'M Y';
+                break;
+            default: // week
+                $startDate = now()->subWeek();
+                $dateFormat = 'd/m';
+        }
+
+        // Tổng quan
+        $totalRevenue = Order::whereIn('status', ['processing', 'completed'])
+            ->where('created_at', '>=', $startDate)
+            ->sum('total_amount');
+        
+        $totalOrders = Order::where('created_at', '>=', $startDate)->count();
+        $completedOrders = Order::where('status', 'completed')
+            ->where('created_at', '>=', $startDate)
+            ->count();
+        $cancelledOrders = Order::where('status', 'cancelled')
+            ->where('created_at', '>=', $startDate)
+            ->count();
+
+        // Top sản phẩm bán chạy
+        $topProducts = OrderItem::select('laptop_id', \DB::raw('SUM(quantity) as total_sold'), \DB::raw('SUM(price * quantity) as total_revenue'))
+            ->whereHas('order', function($query) use ($startDate) {
+                $query->where('created_at', '>=', $startDate)
+                      ->whereIn('status', ['processing', 'completed']);
+            })
+            ->groupBy('laptop_id')
+            ->orderBy('total_sold', 'desc')
+            ->with('laptop')
+            ->take(10)
+            ->get();
+
+        // Doanh thu theo ngày/tháng
+        $revenueByDate = Order::selectRaw('DATE(created_at) as date, SUM(total_amount) as revenue')
+            ->whereIn('status', ['processing', 'completed'])
+            ->where('created_at', '>=', $startDate)
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        // Top khách hàng
+        $topCustomers = Order::selectRaw('customer_name, customer_email, COUNT(*) as order_count, SUM(total_amount) as total_spent')
+            ->whereIn('status', ['processing', 'completed'])
+            ->where('created_at', '>=', $startDate)
+            ->groupBy('customer_name', 'customer_email')
+            ->orderBy('total_spent', 'desc')
+            ->take(10)
+            ->get();
+
+        // Thống kê theo trạng thái
+        $ordersByStatus = Order::selectRaw('status, COUNT(*) as count')
+            ->where('created_at', '>=', $startDate)
+            ->groupBy('status')
+            ->get()
+            ->pluck('count', 'status');
+
+        // Doanh thu theo danh mục
+        $revenueByCategory = OrderItem::join('laptops', 'order_items.laptop_id', '=', 'laptops.id')
+            ->join('categories', 'laptops.category_id', '=', 'categories.id')
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->selectRaw('categories.name as category, SUM(order_items.price * order_items.quantity) as revenue')
+            ->whereIn('orders.status', ['processing', 'completed'])
+            ->where('orders.created_at', '>=', $startDate)
+            ->groupBy('categories.name')
+            ->orderBy('revenue', 'desc')
+            ->get();
+
+        return view('admin.reports.index', compact(
+            'period',
+            'totalRevenue',
+            'totalOrders',
+            'completedOrders',
+            'cancelledOrders',
+            'topProducts',
+            'revenueByDate',
+            'topCustomers',
+            'ordersByStatus',
+            'revenueByCategory'
+        ));
+    }
 }
+

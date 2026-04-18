@@ -13,14 +13,14 @@
         </p>
     </div>
     <div class="flex gap-3">
-        <button class="px-6 py-2.5 rounded-full bg-surface-container-high text-on-surface font-bold text-sm border border-outline-variant/15 hover:bg-surface-bright transition-all flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm">download</span>
-            Xuất báo cáo
-        </button>
-        <button class="px-6 py-2.5 rounded-full bg-secondary text-on-secondary font-bold text-sm hover:shadow-[0_0_20px_rgba(255,117,36,0.3)] transition-all flex items-center gap-2">
+        <a href="{{ route('admin.reports') }}" class="px-6 py-2.5 rounded-full bg-surface-container-high text-black font-bold text-sm border border-outline-variant/15 hover:bg-surface-bright transition-all flex items-center gap-2">
+            <span class="material-symbols-outlined text-sm">monitoring</span>
+            Xem báo cáo
+        </a>
+        <a href="{{ route('admin.pos') }}" class="px-6 py-2.5 rounded-full bg-secondary text-black font-bold text-sm hover:shadow-[0_0_20px_rgba(255,117,36,0.3)] transition-all flex items-center gap-2">
             <span class="material-symbols-outlined text-sm">add</span>
             Tạo đơn hàng
-        </button>
+        </a>
     </div>
 </div>
 
@@ -33,12 +33,12 @@
             <div class="p-3 bg-secondary/20 rounded-lg">
                 <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">monetization_on</span>
             </div>
-            <span class="text-secondary text-xs font-bold bg-secondary/10 px-2 py-1 rounded">+12.5%</span>
+            <span class="text-{{ $revenueGrowth >= 0 ? 'secondary' : 'error' }} text-xs font-bold bg-{{ $revenueGrowth >= 0 ? 'secondary' : 'error' }}/10 px-2 py-1 rounded">{{ $revenueGrowth >= 0 ? '+' : '' }}{{ $revenueGrowth }}%</span>
         </div>
         <p class="text-neutral-500 text-sm font-medium">Tổng doanh thu</p>
-        <h3 class="text-3xl font-bold mt-1 text-white font-headline tracking-tight">8.4B VND</h3>
+        <h3 class="text-3xl font-bold mt-1 text-white font-headline tracking-tight">{{ number_format($totalRevenue / 1000000000, 1) }}B VND</h3>
         <div class="mt-4 h-1 w-full bg-neutral-800 rounded-full overflow-hidden">
-            <div class="h-full bg-secondary w-3/4 rounded-full"></div>
+            <div class="h-full bg-secondary rounded-full transition-all duration-1000" style="width: {{ min(($totalRevenue / 10000000000) * 100, 100) }}%"></div>
         </div>
     </div>
 
@@ -52,8 +52,8 @@
             <span class="text-primary text-xs font-bold bg-primary/10 px-2 py-1 rounded">Đang xử lý</span>
         </div>
         <p class="text-neutral-500 text-sm font-medium">Đơn hàng hiện tại</p>
-        <h3 class="text-3xl font-bold mt-1 text-white font-headline tracking-tight">24</h3>
-        <p class="text-xs text-neutral-400 mt-2">6 đơn hàng cần giao gấp trong hôm nay</p>
+        <h3 class="text-3xl font-bold mt-1 text-white font-headline tracking-tight">{{ $activeOrders }}</h3>
+        <p class="text-xs text-neutral-400 mt-2">{{ $urgentOrders }} đơn hàng cần giao gấp trong hôm nay</p>
     </div>
 
     <!-- Top Seller -->
@@ -66,11 +66,15 @@
             <span class="text-tertiary text-xs font-bold bg-tertiary/10 px-2 py-1 rounded">Bán chạy nhất</span>
         </div>
         <p class="text-neutral-500 text-sm font-medium">Sản phẩm tiêu biểu</p>
-        <h3 class="text-xl font-bold mt-1 text-white font-headline leading-tight">MacBook Pro M3 Max</h3>
-        <div class="flex items-center gap-2 mt-2">
-            <span class="text-[10px] bg-surface-container-highest px-2 py-0.5 rounded text-neutral-300">Space Black</span>
-            <span class="text-[10px] bg-surface-container-highest px-2 py-0.5 rounded text-neutral-300">64GB RAM</span>
-        </div>
+        @if($topProduct && $topProduct->laptop)
+            <h3 class="text-xl font-bold mt-1 text-white font-headline leading-tight">{{ $topProduct->laptop->name }}</h3>
+            <div class="flex items-center gap-2 mt-2">
+                <span class="text-[10px] bg-surface-container-highest px-2 py-0.5 rounded text-neutral-300">Đã bán: {{ $topProduct->total_sold }}</span>
+            </div>
+        @else
+            <h3 class="text-xl font-bold mt-1 text-white font-headline leading-tight">Chưa có dữ liệu</h3>
+            <p class="text-xs text-neutral-400 mt-2">Chưa có đơn hàng nào</p>
+        @endif
     </div>
 </div>
 
@@ -119,13 +123,11 @@
             </div>
             <!-- Chart Labels -->
             <div class="flex justify-between mt-6 px-2">
-                <span class="text-[10px] font-headline text-neutral-600">THỨ 2</span>
-                <span class="text-[10px] font-headline text-neutral-600">THỨ 3</span>
-                <span class="text-[10px] font-headline text-neutral-600">THỨ 4</span>
-                <span class="text-[10px] font-headline text-neutral-300 font-bold">THỨ 5 (HÔM NAY)</span>
-                <span class="text-[10px] font-headline text-neutral-600">THỨ 6</span>
-                <span class="text-[10px] font-headline text-neutral-600">THỨ 7</span>
-                <span class="text-[10px] font-headline text-neutral-600">CHỦ NHẬT</span>
+                @foreach($revenueChart as $index => $day)
+                    <span class="text-[10px] font-headline {{ $index == 6 ? 'text-neutral-300 font-bold' : 'text-neutral-600' }}">
+                        {{ strtoupper($day['day']) }}{{ $index == 6 ? ' (HÔM NAY)' : '' }}
+                    </span>
+                @endforeach
             </div>
         </div>
     </div>
@@ -134,65 +136,27 @@
     <div class="flex flex-col gap-6">
         <h2 class="text-xl font-bold text-white font-headline tracking-tight px-2">Hoạt động gần đây</h2>
         <div class="space-y-4 overflow-y-auto max-h-[500px] pr-2">
-            <!-- Activity Card 1 -->
+            @forelse($recentActivities as $activity)
+            <!-- Activity Card -->
             <div class="bg-surface-variant/40 backdrop-blur-md border border-white/5 p-4 rounded-xl hover:bg-surface-variant/60 transition-all cursor-pointer group">
                 <div class="flex items-start gap-4">
-                    <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                        <span class="material-symbols-outlined text-primary text-xl">shopping_cart_checkout</span>
+                    <div class="w-10 h-10 rounded-full bg-{{ $activity['color'] }}/10 flex items-center justify-center shrink-0">
+                        <span class="material-symbols-outlined text-{{ $activity['color'] }} text-xl">{{ $activity['icon'] }}</span>
                     </div>
                     <div>
-                        <p class="text-sm text-white font-bold">Đơn hàng mới #8429</p>
-                        <p class="text-xs text-neutral-400 mt-1">Khách hàng: Nguyễn Văn A • 12.500.000đ</p>
-                        <p class="text-[10px] text-neutral-600 mt-2 uppercase font-bold">5 phút trước</p>
+                        <p class="text-sm text-white font-bold">{{ $activity['title'] }}</p>
+                        <p class="text-xs text-neutral-400 mt-1">{{ $activity['description'] }}</p>
+                        <p class="text-[10px] text-neutral-600 mt-2 uppercase font-bold">{{ $activity['time'] }}</p>
                     </div>
-                    <span class="material-symbols-outlined ml-auto text-neutral-600 group-hover:text-primary transition-colors">chevron_right</span>
+                    <span class="material-symbols-outlined ml-auto text-neutral-600 group-hover:text-{{ $activity['color'] }} transition-colors">chevron_right</span>
                 </div>
             </div>
-
-            <!-- Activity Card 2 -->
-            <div class="bg-surface-variant/40 backdrop-blur-md border border-white/5 p-4 rounded-xl hover:bg-surface-variant/60 transition-all cursor-pointer group">
-                <div class="flex items-start gap-4">
-                    <div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center shrink-0">
-                        <span class="material-symbols-outlined text-secondary text-xl">inventory</span>
-                    </div>
-                    <div>
-                        <p class="text-sm text-white font-bold">Kho hàng cập nhật</p>
-                        <p class="text-xs text-neutral-400 mt-1">iPhone 15 Pro Max (Natural) đã nhập thêm 50 máy</p>
-                        <p class="text-[10px] text-neutral-600 mt-2 uppercase font-bold">45 phút trước</p>
-                    </div>
-                    <span class="material-symbols-outlined ml-auto text-neutral-600 group-hover:text-secondary transition-colors">chevron_right</span>
-                </div>
+            @empty
+            <div class="text-center py-12">
+                <span class="material-symbols-outlined text-neutral-600 text-5xl mb-4 block">inbox</span>
+                <p class="text-neutral-500 text-sm">Chưa có hoạt động nào</p>
             </div>
-
-            <!-- Activity Card 3 -->
-            <div class="bg-surface-variant/40 backdrop-blur-md border border-white/5 p-4 rounded-xl hover:bg-surface-variant/60 transition-all cursor-pointer group">
-                <div class="flex items-start gap-4">
-                    <div class="w-10 h-10 rounded-full bg-tertiary/10 flex items-center justify-center shrink-0">
-                        <span class="material-symbols-outlined text-tertiary text-xl">person_add</span>
-                    </div>
-                    <div>
-                        <p class="text-sm text-white font-bold">Người dùng mới</p>
-                        <p class="text-xs text-neutral-400 mt-1">Trần Thị B vừa đăng ký tài khoản Platinum</p>
-                        <p class="text-[10px] text-neutral-600 mt-2 uppercase font-bold">2 giờ trước</p>
-                    </div>
-                    <span class="material-symbols-outlined ml-auto text-neutral-600 group-hover:text-tertiary transition-colors">chevron_right</span>
-                </div>
-            </div>
-
-            <!-- Activity Card 4 -->
-            <div class="bg-surface-variant/40 backdrop-blur-md border border-white/5 p-4 rounded-xl hover:bg-surface-variant/60 transition-all cursor-pointer group">
-                <div class="flex items-start gap-4">
-                    <div class="w-10 h-10 rounded-full bg-error/10 flex items-center justify-center shrink-0">
-                        <span class="material-symbols-outlined text-error text-xl">error</span>
-                    </div>
-                    <div>
-                        <p class="text-sm text-white font-bold">Cảnh báo hệ thống</p>
-                        <p class="text-xs text-neutral-400 mt-1">Thanh toán đơn #8410 không thành công</p>
-                        <p class="text-[10px] text-neutral-600 mt-2 uppercase font-bold">3 giờ trước</p>
-                    </div>
-                    <span class="material-symbols-outlined ml-auto text-neutral-600 group-hover:text-error transition-colors">chevron_right</span>
-                </div>
-            </div>
+            @endforelse
         </div>
     </div>
 </div>
