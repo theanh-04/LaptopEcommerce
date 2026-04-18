@@ -33,7 +33,12 @@ class OrderController extends Controller
             $total += $item['price'] * $item['quantity'];
         }
 
+        // Generate order number
+        $orderNumber = 'NK-' . date('ymd') . '-' . str_pad(Order::count() + 1, 4, '0', STR_PAD_LEFT);
+
         $order = Order::create([
+            'order_number' => $orderNumber,
+            'user_id' => auth()->id(),
             'customer_name' => $validated['customer_name'],
             'customer_email' => $validated['customer_email'],
             'customer_phone' => $validated['customer_phone'],
@@ -52,7 +57,7 @@ class OrderController extends Controller
         }
 
         session()->forget('cart');
-        return redirect()->route('order.success')->with('success', 'Đặt hàng thành công!');
+        return redirect()->route('order.success')->with('order_number', $orderNumber);
     }
 
     public function success()
