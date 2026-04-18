@@ -10,7 +10,11 @@ class Laptop extends Model
     protected $fillable = [
         'category_id', 'name', 'slug', 'description', 'brand',
         'processor', 'ram', 'storage', 'display', 'graphics',
-        'price', 'stock', 'image', 'sku'
+        'price', 'stock', 'image', 'sku', 'is_featured'
+    ];
+
+    protected $casts = [
+        'is_featured' => 'boolean'
     ];
 
     public function category(): BelongsTo
