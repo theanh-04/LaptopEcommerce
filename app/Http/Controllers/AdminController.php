@@ -442,6 +442,7 @@ class AdminController extends Controller
 
         $data = $request->all();
         $data['slug'] = Str::slug($request->name);
+        $data['is_featured'] = $request->has('is_featured');
         
         // Generate SKU
         $brandPrefix = strtoupper(substr($request->brand, 0, 3));
@@ -486,6 +487,7 @@ class AdminController extends Controller
 
         $data = $request->all();
         $data['slug'] = Str::slug($request->name);
+        $data['is_featured'] = $request->has('is_featured');
 
         // Handle image upload
         if ($request->hasFile('image')) {

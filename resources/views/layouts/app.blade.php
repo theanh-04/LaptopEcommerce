@@ -72,13 +72,50 @@
                         <input name="search" class="bg-white/[0.03] border border-white/[0.08] rounded-full py-2.5 pl-11 pr-6 text-sm focus:outline-none focus:border-primary/50 transition-all w-72 placeholder:text-white/20" placeholder="Tìm kiếm laptop..." type="text"/>
                     </form>
                 </div>
-                <div class="flex gap-2">
+                <div class="flex gap-2 items-center">
                     <a href="{{ route('cart.index') }}" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/5 transition-all text-primary/80 hover:text-primary relative">
                         <span class="material-symbols-outlined">shopping_cart</span>
                         @if(session('cart'))
                             <span class="absolute -top-1 -right-1 bg-secondary text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">{{ count(session('cart')) }}</span>
                         @endif
                     </a>
+                    @auth
+                        <div class="relative group">
+                            <button class="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 hover:bg-white/10 transition-all">
+                                <span class="material-symbols-outlined text-primary">account_circle</span>
+                                <span class="text-white font-medium text-sm">{{ auth()->user()->name }}</span>
+                                <span class="material-symbols-outlined text-white/50 text-sm">expand_more</span>
+                            </button>
+                            <div class="absolute right-0 mt-2 w-48 bg-neutral-900 rounded-lg shadow-xl border border-white/10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                @if(auth()->user()->isAdmin())
+                                    <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-all text-white/80 hover:text-white">
+                                        <span class="material-symbols-outlined text-lg">dashboard</span>
+                                        <span class="text-sm">Dashboard</span>
+                                    </a>
+                                @endif
+                                <a href="#" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-all text-white/80 hover:text-white">
+                                    <span class="material-symbols-outlined text-lg">person</span>
+                                    <span class="text-sm">Tài khoản</span>
+                                </a>
+                                <a href="#" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-all text-white/80 hover:text-white">
+                                    <span class="material-symbols-outlined text-lg">receipt_long</span>
+                                    <span class="text-sm">Đơn hàng</span>
+                                </a>
+                                <div class="border-t border-white/10 my-1"></div>
+                                <form action="{{ route('logout') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 hover:bg-red-500/10 transition-all text-red-400 hover:text-red-300">
+                                        <span class="material-symbols-outlined text-lg">logout</span>
+                                        <span class="text-sm">Đăng xuất</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    @else
+                        <a href="{{ route('login') }}" class="px-6 py-2 rounded-full bg-white/5 hover:bg-white/10 transition-all text-white font-bold text-sm">
+                            Đăng nhập
+                        </a>
+                    @endauth
                 </div>
             </div>
         </div>

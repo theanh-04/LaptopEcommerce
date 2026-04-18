@@ -86,6 +86,14 @@
                     @enderror
                 </div>
 
+                <div class="flex items-center gap-3 pt-8">
+                    <input type="checkbox" name="is_featured" id="is_featured" {{ old('is_featured', $laptop->is_featured ?? false) ? 'checked' : '' }}
+                        class="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary">
+                    <label for="is_featured" class="text-sm font-bold text-neutral-400 cursor-pointer">
+                        Hiển thị trang chủ (Featured)
+                    </label>
+                </div>
+
                 <div class="md:col-span-2">
                     <label class="block text-sm font-bold text-neutral-400 mb-2">Mô tả *</label>
                     <textarea name="description" rows="4" required

@@ -63,9 +63,12 @@
             <span class="material-symbols-outlined group-hover:translate-x-1 duration-200">settings</span>
             <span class="text-sm">Settings</span>
         </a>
-        <button class="mt-4 flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-surface-container-highest text-white text-sm font-bold hover:bg-error/20 hover:text-error transition-colors">
+        <button onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="mt-4 flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-surface-container-highest text-white text-sm font-bold hover:bg-error/20 hover:text-error transition-colors">
             <span class="material-symbols-outlined text-sm">logout</span>
             Log Out
         </button>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+            @csrf
+        </form>
     </div>
 </aside>
