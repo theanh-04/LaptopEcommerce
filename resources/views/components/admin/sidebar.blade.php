@@ -28,6 +28,10 @@
             <span class="material-symbols-outlined group-hover:translate-x-1 duration-200" style="font-variation-settings: {{ request()->routeIs('admin.promotions*') ? "'FILL' 1" : "'FILL' 0" }};">local_offer</span>
             <span class="text-sm">Promotions</span>
         </a>
+        <a class="flex items-center gap-4 px-4 py-3 {{ request()->routeIs('admin.customers*') ? 'text-orange-500 font-bold border-r-2 border-orange-500 bg-neutral-900/30' : 'text-neutral-500 hover:bg-neutral-900/50 hover:text-white' }} transition-all group" href="{{ route('admin.customers') }}">
+            <span class="material-symbols-outlined group-hover:translate-x-1 duration-200" style="font-variation-settings: {{ request()->routeIs('admin.customers*') ? "'FILL' 1" : "'FILL' 0" }};">person</span>
+            <span class="text-sm">Customers</span>
+        </a>
         <a class="flex items-center gap-4 px-4 py-3 {{ request()->routeIs('admin.employees*') ? 'text-orange-500 font-bold border-r-2 border-orange-500 bg-neutral-900/30' : 'text-neutral-500 hover:bg-neutral-900/50 hover:text-white' }} transition-all group" href="{{ route('admin.employees') }}">
             <span class="material-symbols-outlined group-hover:translate-x-1 duration-200" style="font-variation-settings: {{ request()->routeIs('admin.employees*') ? "'FILL' 1" : "'FILL' 0" }};">badge</span>
             <span class="text-sm">Employees</span>
