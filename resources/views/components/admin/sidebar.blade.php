@@ -48,9 +48,9 @@
             <span class="material-symbols-outlined group-hover:translate-x-1 duration-200" style="font-variation-settings: {{ request()->routeIs('admin.orders*') ? "'FILL' 1" : "'FILL' 0" }};">shopping_cart</span>
             <span class="text-sm">Orders</span>
         </a>
-        <a class="flex items-center gap-4 px-4 py-3 text-neutral-500 hover:bg-neutral-900/50 hover:text-white transition-all group" href="#">
-            <span class="material-symbols-outlined group-hover:translate-x-1 duration-200">monitoring</span>
-            <span class="text-sm">Analytics</span>
+        <a class="flex items-center gap-4 px-4 py-3 {{ request()->routeIs('admin.reports*') ? 'text-orange-500 font-bold border-r-2 border-orange-500 bg-neutral-900/30' : 'text-neutral-500 hover:bg-neutral-900/50 hover:text-white' }} transition-all group" href="{{ route('admin.reports') }}">
+            <span class="material-symbols-outlined group-hover:translate-x-1 duration-200" style="font-variation-settings: {{ request()->routeIs('admin.reports*') ? "'FILL' 1" : "'FILL' 0" }};">monitoring</span>
+            <span class="text-sm">Reports</span>
         </a>
     </nav>
     

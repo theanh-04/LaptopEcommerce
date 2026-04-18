@@ -82,4 +82,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::delete('/customers/{id}', [AdminController::class, 'customersDelete'])->name('customers.delete');
     Route::get('/customers/search', [AdminController::class, 'customersSearch'])->name('customers.search');
     Route::get('/customers/{id}/detail', [AdminController::class, 'customersDetail'])->name('customers.detail');
+    
+    // Reports
+    Route::get('/reports', [AdminController::class, 'reports'])->name('reports');
 });
