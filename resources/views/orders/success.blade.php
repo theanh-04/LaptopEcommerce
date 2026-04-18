@@ -28,11 +28,27 @@
 
             <!-- Order Info -->
             <div class="bg-[#131313] rounded-2xl p-8 border border-white/5 mb-12 inline-block">
-                <div class="flex items-center gap-4 text-white/70">
-                    <span class="material-symbols-outlined text-primary">schedule</span>
-                    <div class="text-left">
-                        <div class="text-xs text-white/50 uppercase tracking-wider">Thời gian đặt hàng</div>
-                        <div class="font-bold text-white">{{ now()->format('d/m/Y H:i') }}</div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="flex items-center gap-4 text-white/70">
+                        <span class="material-symbols-outlined text-primary">confirmation_number</span>
+                        <div class="text-left">
+                            <div class="text-xs text-white/50 uppercase tracking-wider">Mã đơn hàng</div>
+                            <div class="font-bold text-white">{{ session('order_number') ?? 'N/A' }}</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 text-white/70">
+                        <span class="material-symbols-outlined text-secondary">payments</span>
+                        <div class="text-left">
+                            <div class="text-xs text-white/50 uppercase tracking-wider">Tổng tiền</div>
+                            <div class="font-bold text-secondary text-lg">{{ number_format(session('total') ?? 0) }}₫</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 text-white/70">
+                        <span class="material-symbols-outlined text-primary">schedule</span>
+                        <div class="text-left">
+                            <div class="text-xs text-white/50 uppercase tracking-wider">Thời gian</div>
+                            <div class="font-bold text-white">{{ now()->format('d/m/Y H:i') }}</div>
+                        </div>
                     </div>
                 </div>
             </div>

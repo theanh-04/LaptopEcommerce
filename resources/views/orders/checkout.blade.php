@@ -14,8 +14,10 @@
         </p>
     </header>
 
-    <form action="{{ route('order.store') }}" method="POST">
+    <form action="{{ route('order.store') }}" method="POST" id="checkoutForm">
         @csrf
+        <input type="hidden" name="promo_code" id="appliedPromoCode">
+        
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
             <!-- Form Area -->
             <div class="lg:col-span-7">
@@ -28,36 +30,24 @@
                     <div class="space-y-6">
                         <div>
                             <label class="text-[10px] text-white/50 font-label uppercase tracking-[0.2em] block mb-3">Họ và tên *</label>
-                            <input type="text" name="customer_name" required class="w-full bg-[#0e0e0e] border border-white/10 rounded-xl px-6 py-4 text-white focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all @error('customer_name') border-error @enderror" placeholder="Nguyễn Văn A">
-                            @error('customer_name')
-                                <p class="text-error text-xs mt-2">{{ $message }}</p>
-                            @enderror
+                            <input type="text" name="customer_name" value="{{ auth()->user()->name ?? old('customer_name') }}" required class="w-full bg-[#0e0e0e] border border-white/10 rounded-xl px-6 py-4 text-white focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all" placeholder="Nguyễn Văn A">
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="text-[10px] text-white/50 font-label uppercase tracking-[0.2em] block mb-3">Email *</label>
-                                <input type="email" name="customer_email" required class="w-full bg-[#0e0e0e] border border-white/10 rounded-xl px-6 py-4 text-white focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all @error('customer_email') border-error @enderror" placeholder="email@example.com">
-                                @error('customer_email')
-                                    <p class="text-error text-xs mt-2">{{ $message }}</p>
-                                @enderror
+                                <input type="email" name="customer_email" value="{{ auth()->user()->email ?? old('customer_email') }}" required class="w-full bg-[#0e0e0e] border border-white/10 rounded-xl px-6 py-4 text-white focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all" placeholder="email@example.com">
                             </div>
 
                             <div>
                                 <label class="text-[10px] text-white/50 font-label uppercase tracking-[0.2em] block mb-3">Số điện thoại *</label>
-                                <input type="tel" name="customer_phone" required class="w-full bg-[#0e0e0e] border border-white/10 rounded-xl px-6 py-4 text-white focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all @error('customer_phone') border-error @enderror" placeholder="0912345678">
-                                @error('customer_phone')
-                                    <p class="text-error text-xs mt-2">{{ $message }}</p>
-                                @enderror
+                                <input type="tel" name="customer_phone" value="{{ old('customer_phone') }}" required class="w-full bg-[#0e0e0e] border border-white/10 rounded-xl px-6 py-4 text-white focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all" placeholder="0912345678">
                             </div>
                         </div>
 
                         <div>
                             <label class="text-[10px] text-white/50 font-label uppercase tracking-[0.2em] block mb-3">Địa chỉ giao hàng *</label>
-                            <textarea name="customer_address" required rows="4" class="w-full bg-[#0e0e0e] border border-white/10 rounded-xl px-6 py-4 text-white focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all @error('customer_address') border-error @enderror" placeholder="Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành phố"></textarea>
-                            @error('customer_address')
-                                <p class="text-error text-xs mt-2">{{ $message }}</p>
-                            @enderror
+                            <textarea name="customer_address" required rows="4" class="w-full bg-[#0e0e0e] border border-white/10 rounded-xl px-6 py-4 text-white focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all" placeholder="Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành phố">{{ old('customer_address') }}</textarea>
                         </div>
                     </div>
                 </div>
@@ -97,34 +87,50 @@
                     </h2>
 
                     <div class="space-y-6 mb-8">
-                        @php $total = 0; @endphp
+                        @php $subtotal = 0; @endphp
                         @foreach($cart as $id => $item)
-                            @php $total += $item['price'] * $item['quantity']; @endphp
+                            @php $subtotal += $item['price'] * $item['quantity']; @endphp
                             <div class="flex gap-4 pb-6 border-b border-white/5">
                                 <img src="{{ $item['image'] ?? 'https://via.placeholder.com/100x100?text=Laptop' }}" alt="{{ $item['name'] }}" class="w-20 h-20 object-cover rounded-lg">
                                 <div class="flex-1">
                                     <h3 class="font-bold text-white text-sm">{{ $item['name'] }}</h3>
                                     <p class="text-white/50 text-xs mt-1">Số lượng: {{ $item['quantity'] }}</p>
-                                    <p class="text-secondary font-bold mt-2">{{ number_format($item['price'] * $item['quantity'], 0, ',', '.') }}₫</p>
+                                    <p class="text-secondary font-bold mt-2">{{ number_format($item['price'] * $item['quantity']) }}₫</p>
                                 </div>
                             </div>
                         @endforeach
                     </div>
 
+                    <!-- Promo Code -->
+                    <div class="mb-6">
+                        <label class="text-[10px] text-white/50 font-label uppercase tracking-[0.2em] block mb-3">Mã khuyến mãi</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="promoCodeInput" class="flex-1 bg-[#0e0e0e] border border-white/10 rounded-lg px-4 py-3 text-white text-sm focus:ring-2 focus:ring-primary/30 uppercase" placeholder="Nhập mã...">
+                            <button type="button" onclick="applyPromo()" class="px-6 py-3 bg-primary/20 text-primary rounded-lg font-bold hover:bg-primary/30 transition-all">
+                                Áp dụng
+                            </button>
+                        </div>
+                        <p id="promoMessage" class="text-xs mt-2 hidden"></p>
+                    </div>
+
                     <div class="space-y-4 mb-8 pb-8 border-b border-white/5">
                         <div class="flex justify-between text-white/70">
                             <span>Tạm tính</span>
-                            <span class="font-bold">{{ number_format($total, 0, ',', '.') }}₫</span>
+                            <span class="font-bold" id="subtotalDisplay">{{ number_format($subtotal) }}₫</span>
+                        </div>
+                        <div id="discountRow" class="flex justify-between text-green-400 hidden">
+                            <span>Giảm giá (<span id="promoCodeDisplay"></span>)</span>
+                            <span class="font-bold" id="discountDisplay">0₫</span>
                         </div>
                         <div class="flex justify-between text-white/70">
                             <span>Phí vận chuyển</span>
-                            <span class="text-primary font-bold">MIỄN PHÍ</span>
+                            <span class="font-bold" id="shippingDisplay">{{ $subtotal >= 10000000 ? 'MIỄN PHÍ' : number_format(30000) . '₫' }}</span>
                         </div>
                     </div>
 
                     <div class="flex justify-between items-center mb-8">
                         <span class="text-white font-headline font-bold text-lg">Tổng cộng</span>
-                        <span class="text-4xl font-headline font-black text-secondary">{{ number_format($total, 0, ',', '.') }}₫</span>
+                        <span class="text-4xl font-headline font-black text-secondary" id="totalDisplay">{{ number_format($subtotal >= 10000000 ? $subtotal : $subtotal + 30000) }}₫</span>
                     </div>
 
                     <button type="submit" class="w-full bg-secondary text-white font-headline font-black py-6 rounded-2xl flex items-center justify-center gap-4 transition-all duration-500 hover:scale-[1.03] hover:brightness-110 active:scale-95 shadow-[0_0_30px_rgba(255,117,36,0.4)]">
@@ -136,4 +142,72 @@
         </div>
     </form>
 </main>
+
+<script>
+let subtotal = {{ $subtotal }};
+let discount = 0;
+let shipping = {{ $subtotal >= 10000000 ? 0 : 30000 }};
+
+function formatPrice(price) {
+    return new Intl.NumberFormat('vi-VN').format(Math.round(price));
+}
+
+function updateTotal() {
+    const total = subtotal - discount + shipping;
+    document.getElementById('totalDisplay').textContent = formatPrice(total) + '₫';
+}
+
+async function applyPromo() {
+    const code = document.getElementById('promoCodeInput').value.trim().toUpperCase();
+    const messageEl = document.getElementById('promoMessage');
+    
+    if (!code) {
+        messageEl.textContent = 'Vui lòng nhập mã khuyến mãi';
+        messageEl.className = 'text-xs mt-2 text-red-400';
+        messageEl.classList.remove('hidden');
+        return;
+    }
+
+    try {
+        const response = await fetch('{{ route("order.checkPromo") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ code, subtotal })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            discount = result.discount;
+            document.getElementById('appliedPromoCode').value = result.code;
+            document.getElementById('promoCodeDisplay').textContent = result.code;
+            document.getElementById('discountDisplay').textContent = '-' + formatPrice(discount) + '₫';
+            document.getElementById('discountRow').classList.remove('hidden');
+            
+            messageEl.textContent = result.message;
+            messageEl.className = 'text-xs mt-2 text-green-400';
+            messageEl.classList.remove('hidden');
+            
+            updateTotal();
+        } else {
+            discount = 0;
+            document.getElementById('appliedPromoCode').value = '';
+            document.getElementById('discountRow').classList.add('hidden');
+            
+            messageEl.textContent = result.message;
+            messageEl.className = 'text-xs mt-2 text-red-400';
+            messageEl.classList.remove('hidden');
+            
+            updateTotal();
+        }
+    } catch (error) {
+        messageEl.textContent = 'Có lỗi xảy ra khi áp dụng mã';
+        messageEl.className = 'text-xs mt-2 text-red-400';
+        messageEl.classList.remove('hidden');
+    }
+}
+</script>
 @endsection
