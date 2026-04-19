@@ -72,6 +72,7 @@
                 <th class="px-6 py-5 text-xs uppercase font-bold text-neutral-500 tracking-widest">Khách hàng</th>
                 <th class="px-6 py-5 text-xs uppercase font-bold text-neutral-500 tracking-widest">Liên hệ</th>
                 <th class="px-6 py-5 text-xs uppercase font-bold text-neutral-500 tracking-widest">Sản phẩm</th>
+                <th class="px-6 py-5 text-xs uppercase font-bold text-neutral-500 tracking-widest">Nhân viên</th>
                 <th class="px-6 py-5 text-xs uppercase font-bold text-neutral-500 tracking-widest">Tổng tiền</th>
                 <th class="px-6 py-5 text-xs uppercase font-bold text-neutral-500 tracking-widest">Trạng thái</th>
                 <th class="px-6 py-5 text-xs uppercase font-bold text-neutral-500 tracking-widest text-right">Hành động</th>
@@ -98,6 +99,13 @@
                     <span class="text-neutral-400 text-sm">sản phẩm</span>
                 </td>
                 <td class="px-6 py-5">
+                    @if($order->employee_name)
+                        <span class="text-cyan-400 text-sm font-medium">{{ $order->employee_name }}</span>
+                    @else
+                        <span class="text-neutral-500 text-sm italic">Chưa gán</span>
+                    @endif
+                </td>
+                <td class="px-6 py-5">
                     <p class="font-bold text-white text-lg">{{ number_format($order->total) }}₫</p>
                 </td>
                 <td class="px-6 py-5">
@@ -115,6 +123,12 @@
                     <div class="flex justify-end gap-2">
                         <button onclick="viewOrderDetail({{ $order->id }})" class="p-2 text-neutral-500 hover:text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-all" title="Xem chi tiết">
                             <span class="material-symbols-outlined text-sm">visibility</span>
+                        </button>
+                        <button onclick="printInvoice({{ $order->id }})" class="p-2 text-neutral-500 hover:text-purple-400 hover:bg-purple-400/10 rounded-lg transition-all" title="In hóa đơn">
+                            <span class="material-symbols-outlined text-sm">print</span>
+                        </button>
+                        <button onclick="assignEmployee({{ $order->id }})" class="p-2 text-neutral-500 hover:text-blue-400 hover:bg-blue-400/10 rounded-lg transition-all" title="Gán nhân viên">
+                            <span class="material-symbols-outlined text-sm">person_add</span>
                         </button>
                         @if($order->status == 'pending')
                         <button onclick="updateStatus({{ $order->id }}, 'processing')" class="p-2 text-neutral-500 hover:text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-all" title="Xử lý">
@@ -154,6 +168,35 @@
     </div>
 </div>
 
+<!-- Assign Employee Modal -->
+<div id="assignEmployeeModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center">
+    <div class="bg-neutral-900 rounded-xl w-full max-w-md overflow-hidden shadow-2xl border border-neutral-800">
+        <div class="p-6 bg-neutral-950 border-b border-neutral-800 flex justify-between items-center">
+            <h2 class="text-xl font-headline font-bold text-white">Gán nhân viên xử lý</h2>
+            <button onclick="closeAssignModal()" class="p-2 hover:bg-neutral-800 rounded-lg transition-colors text-neutral-400 hover:text-white">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div class="p-6">
+            <label class="block text-sm font-bold text-cyan-400 mb-3">Chọn nhân viên</label>
+            <select id="employeeSelect" class="w-full bg-white text-black border border-neutral-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-400/50">
+                <option value="">-- Chọn nhân viên --</option>
+                @foreach($employees as $employee)
+                    <option value="{{ $employee->id }}">{{ $employee->name }} - {{ $employee->position }}</option>
+                @endforeach
+            </select>
+            <div class="flex gap-3 mt-6">
+                <button onclick="closeAssignModal()" class="flex-1 px-4 py-3 bg-neutral-800 text-white rounded-lg hover:bg-neutral-700 transition-colors font-bold">
+                    Hủy
+                </button>
+                <button onclick="confirmAssign()" class="flex-1 px-4 py-3 bg-cyan-400 text-black rounded-lg hover:bg-cyan-300 transition-colors font-bold">
+                    Xác nhận
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @push('scripts')
 <script>
 function filterOrders() {
@@ -183,6 +226,48 @@ function viewOrderDetail(orderId) {
 
 function closeModal() {
     document.getElementById('orderDetailModal').classList.add('hidden');
+}
+
+let currentOrderId = null;
+
+function assignEmployee(orderId) {
+    currentOrderId = orderId;
+    document.getElementById('assignEmployeeModal').classList.remove('hidden');
+}
+
+function closeAssignModal() {
+    document.getElementById('assignEmployeeModal').classList.add('hidden');
+    currentOrderId = null;
+}
+
+function confirmAssign() {
+    const employeeId = document.getElementById('employeeSelect').value;
+    if (!employeeId) {
+        alert('Vui lòng chọn nhân viên');
+        return;
+    }
+
+    fetch(`/admin/orders/${currentOrderId}/assign`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ employee_id: employeeId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message);
+            location.reload();
+        } else {
+            alert(data.message || 'Có lỗi xảy ra');
+        }
+    });
+}
+
+function printInvoice(orderId) {
+    window.open(`/admin/orders/${orderId}/invoice`, '_blank');
 }
 
 function renderOrderDetail(order) {

@@ -358,7 +358,7 @@ class AdminController extends Controller
     public function orders()
     {
         $pendingOrders = Order::where('status', 'pending')
-            ->with('orderItems.laptop')
+            ->with(['orderItems.laptop', 'employee'])
             ->get()
             ->map(function($order) {
                 return (object)[
@@ -369,12 +369,13 @@ class AdminController extends Controller
                     'customer_phone' => $order->customer_phone,
                     'items_count' => $order->orderItems->sum('quantity'),
                     'total' => $order->total_amount,
-                    'status' => $order->status
+                    'status' => $order->status,
+                    'employee_name' => $order->employee ? $order->employee->name : null
                 ];
             });
 
         $processingOrders = Order::where('status', 'processing')
-            ->with('orderItems.laptop')
+            ->with(['orderItems.laptop', 'employee'])
             ->get()
             ->map(function($order) {
                 return (object)[
@@ -385,12 +386,13 @@ class AdminController extends Controller
                     'customer_phone' => $order->customer_phone,
                     'items_count' => $order->orderItems->sum('quantity'),
                     'total' => $order->total_amount,
-                    'status' => $order->status
+                    'status' => $order->status,
+                    'employee_name' => $order->employee ? $order->employee->name : null
                 ];
             });
 
         $shippedOrders = Order::where('status', 'completed')
-            ->with('orderItems.laptop')
+            ->with(['orderItems.laptop', 'employee'])
             ->latest()
             ->take(10)
             ->get()
@@ -404,11 +406,17 @@ class AdminController extends Controller
                     'items_count' => $order->orderItems->sum('quantity'),
                     'total' => $order->total_amount,
                     'status' => $order->status,
-                    'completed_at' => $order->updated_at->format('d/m/Y')
+                    'completed_at' => $order->updated_at->format('d/m/Y'),
+                    'employee_name' => $order->employee ? $order->employee->name : null
                 ];
             });
 
-        return view('admin.orders.index', compact('pendingOrders', 'processingOrders', 'shippedOrders'));
+        // Get active employees for assignment
+        $employees = \App\Models\Employee::where('is_active', true)
+            ->orderBy('name')
+            ->get();
+
+        return view('admin.orders.index', compact('pendingOrders', 'processingOrders', 'shippedOrders', 'employees'));
     }
 
     public function updateOrderStatus(Request $request, $id)
@@ -1097,3 +1105,21 @@ class AdminController extends Controller
     }
 }
 
+
+    public function assignEmployee(Request $request, $id)
+    {
+        $order = Order::findOrFail($id);
+        $order->employee_id = $request->employee_id;
+        $order->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Đã gán nhân viên xử lý đơn hàng'
+        ]);
+    }
+
+    public function printInvoice($id)
+    {
+        $order = Order::with(['orderItems.laptop', 'employee'])->findOrFail($id);
+        return view('admin.orders.invoice', compact('order'));
+    }

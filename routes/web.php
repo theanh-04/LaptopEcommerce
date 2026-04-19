@@ -44,6 +44,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('/orders', [AdminController::class, 'orders'])->name('orders');
     Route::get('/orders/{id}', [AdminController::class, 'getOrderDetail'])->name('orders.detail');
     Route::post('/orders/{id}/status', [AdminController::class, 'updateOrderStatus'])->name('orders.updateStatus');
+    Route::post('/orders/{id}/assign', [AdminController::class, 'assignEmployee'])->name('orders.assign');
+    Route::get('/orders/{id}/invoice', [AdminController::class, 'printInvoice'])->name('orders.invoice');
     Route::get('/inventory', [AdminController::class, 'inventory'])->name('inventory');
     Route::get('/inventory/create', [AdminController::class, 'createProduct'])->name('inventory.create');
     Route::post('/inventory', [AdminController::class, 'storeProduct'])->name('inventory.store');
