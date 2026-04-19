@@ -151,7 +151,7 @@ php artisan db:seed --class=UpdateLaptopsSeeder
 
 ## Contributors
 - **theanh-04** (Theang1405@gmail.com) - Giao diện người dùng
--                 - Admin dashboard & employees
+-    khanh2404              - Admin dashboard & employees
 - **Theeanh204** (20224145@eaut.edu.vn) - Orders, Inventory, POS
 
 ## Tech Stack

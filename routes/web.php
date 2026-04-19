@@ -30,6 +30,15 @@ Route::get('/order/success', [OrderController::class, 'success'])->name('order.s
 Route::post('/order/check-promo', [OrderController::class, 'checkPromo'])->name('order.checkPromo');
 Route::get('/my-orders', [OrderController::class, 'myOrders'])->name('order.myOrders');
 
+// Profile Routes
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'index'])->name('profile.index');
+    Route::get('/profile/edit', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile/change-password', [\App\Http\Controllers\ProfileController::class, 'changePasswordForm'])->name('profile.changePassword');
+    Route::post('/profile/change-password', [\App\Http\Controllers\ProfileController::class, 'changePassword'])->name('profile.changePassword.post');
+});
+
 // Admin Routes
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
     Route::redirect('/', '/admin/dashboard');
