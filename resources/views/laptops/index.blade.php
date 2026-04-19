@@ -5,30 +5,98 @@
 @section('content')
 <main class="max-w-screen-2xl mx-auto flex flex-col lg:flex-row min-h-screen">
     <!-- SideNavBar (Filters) -->
-    <aside class="bg-[#0e0e0e] h-[calc(100vh-80px)] w-72 border-r border-white/5 hidden lg:flex flex-col gap-8 p-8 sticky top-20">
+    <aside class="bg-[#0e0e0e] h-[calc(100vh-80px)] w-72 border-r border-white/5 hidden lg:flex flex-col gap-6 p-6 sticky top-20 overflow-y-auto">
         <div class="space-y-1">
-            <h2 class="text-white/90 font-bold uppercase tracking-widest font-headline text-xs">Phân loại</h2>
-            <p class="text-white/30 text-[10px] font-medium uppercase tracking-tighter">Refine your machine</p>
+            <h2 class="text-white/90 font-bold uppercase tracking-widest font-headline text-xs">Bộ lọc</h2>
+            <p class="text-white/30 text-[10px] font-medium uppercase tracking-tighter">Tìm laptop phù hợp</p>
         </div>
         
-        <nav class="flex flex-col gap-1.5">
-            <a href="{{ route('laptops.index') }}" class="flex items-center gap-3 p-3 {{ !request('category') ? 'text-[#ff7524] bg-[#ff7524]/5 border border-[#ff7524]/20' : 'text-white/50 hover:text-white/90 hover:bg-white/5' }} rounded-lg cursor-pointer transition-all text-sm">
-                <span class="material-symbols-outlined text-[18px]">laptop_mac</span>
-                <span>Tất cả</span>
-            </a>
-            
-            @foreach($categories as $category)
-            <a href="{{ route('laptops.index', ['category' => $category->slug]) }}" class="flex items-center gap-3 p-3 {{ request('category') == $category->slug ? 'text-[#ff7524] bg-[#ff7524]/5 border border-[#ff7524]/20' : 'text-white/50 hover:text-white/90 hover:bg-white/5' }} rounded-lg cursor-pointer transition-all text-sm group">
-                <span class="material-symbols-outlined text-[18px] group-hover:text-primary transition-colors">branding_watermark</span>
-                <span>{{ $category->name }}</span>
-            </a>
-            @endforeach
-        </nav>
+        <form action="{{ route('laptops.index') }}" method="GET" id="filterForm">
+            <!-- Category Filter -->
+            <div class="mb-6">
+                <h3 class="text-white/70 font-bold text-xs uppercase tracking-wider mb-3">Danh mục</h3>
+                <nav class="flex flex-col gap-1.5">
+                    <label class="flex items-center gap-3 p-2 {{ !request('category') ? 'text-[#ff7524] bg-[#ff7524]/5' : 'text-white/50 hover:text-white/90' }} rounded-lg cursor-pointer transition-all text-sm">
+                        <input type="radio" name="category" value="" {{ !request('category') ? 'checked' : '' }} onchange="document.getElementById('filterForm').submit()" class="hidden">
+                        <span class="material-symbols-outlined text-[16px]">laptop_mac</span>
+                        <span>Tất cả</span>
+                    </label>
+                    
+                    @foreach($categories as $category)
+                    <label class="flex items-center gap-3 p-2 {{ request('category') == $category->slug ? 'text-[#ff7524] bg-[#ff7524]/5' : 'text-white/50 hover:text-white/90' }} rounded-lg cursor-pointer transition-all text-sm">
+                        <input type="radio" name="category" value="{{ $category->slug }}" {{ request('category') == $category->slug ? 'checked' : '' }} onchange="document.getElementById('filterForm').submit()" class="hidden">
+                        <span class="material-symbols-outlined text-[16px]">branding_watermark</span>
+                        <span>{{ $category->name }}</span>
+                    </label>
+                    @endforeach
+                </nav>
+            </div>
 
-        <div class="mt-auto p-5 glass-panel rounded-xl ultra-thin-border">
-            <span class="text-[10px] uppercase tracking-widest text-primary block mb-2 font-bold">Hỗ trợ kỹ thuật</span>
-            <p class="text-xs text-white/50 leading-relaxed font-medium">Đội ngũ chuyên gia luôn sẵn sàng tư vấn cấu hình phù hợp nhất cho bạn.</p>
-        </div>
+            <!-- Brand Filter -->
+            <div class="mb-6">
+                <h3 class="text-white/70 font-bold text-xs uppercase tracking-wider mb-3">Thương hiệu</h3>
+                <select name="brand" onchange="document.getElementById('filterForm').submit()" class="w-full bg-white text-black border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40">
+                    <option value="">Tất cả</option>
+                    @foreach($brands as $brand)
+                        <option value="{{ $brand->id }}" {{ request('brand') == $brand->id ? 'selected' : '' }}>{{ $brand->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <!-- Price Range -->
+            <div class="mb-6">
+                <h3 class="text-white/70 font-bold text-xs uppercase tracking-wider mb-3">Khoảng giá</h3>
+                <div class="space-y-2">
+                    <input type="number" name="min_price" value="{{ request('min_price') }}" placeholder="Từ (₫)" class="w-full bg-white text-black border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40">
+                    <input type="number" name="max_price" value="{{ request('max_price') }}" placeholder="Đến (₫)" class="w-full bg-white text-black border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40">
+                </div>
+            </div>
+
+            <!-- CPU Filter -->
+            <div class="mb-6">
+                <h3 class="text-white/70 font-bold text-xs uppercase tracking-wider mb-3">CPU</h3>
+                <input type="text" name="cpu" value="{{ request('cpu') }}" placeholder="VD: Intel i7, AMD Ryzen" class="w-full bg-white text-black border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40">
+            </div>
+
+            <!-- RAM Filter -->
+            <div class="mb-6">
+                <h3 class="text-white/70 font-bold text-xs uppercase tracking-wider mb-3">RAM</h3>
+                <select name="ram" onchange="document.getElementById('filterForm').submit()" class="w-full bg-white text-black border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40">
+                    <option value="">Tất cả</option>
+                    <option value="8GB" {{ request('ram') == '8GB' ? 'selected' : '' }}>8GB</option>
+                    <option value="16GB" {{ request('ram') == '16GB' ? 'selected' : '' }}>16GB</option>
+                    <option value="32GB" {{ request('ram') == '32GB' ? 'selected' : '' }}>32GB</option>
+                    <option value="64GB" {{ request('ram') == '64GB' ? 'selected' : '' }}>64GB</option>
+                </select>
+            </div>
+
+            <!-- Storage Filter -->
+            <div class="mb-6">
+                <h3 class="text-white/70 font-bold text-xs uppercase tracking-wider mb-3">Ổ cứng</h3>
+                <select name="storage" onchange="document.getElementById('filterForm').submit()" class="w-full bg-white text-black border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40">
+                    <option value="">Tất cả</option>
+                    <option value="256GB" {{ request('storage') == '256GB' ? 'selected' : '' }}>256GB</option>
+                    <option value="512GB" {{ request('storage') == '512GB' ? 'selected' : '' }}>512GB</option>
+                    <option value="1TB" {{ request('storage') == '1TB' ? 'selected' : '' }}>1TB</option>
+                    <option value="2TB" {{ request('storage') == '2TB' ? 'selected' : '' }}>2TB</option>
+                </select>
+            </div>
+
+            <!-- Hidden search field -->
+            @if(request('search'))
+                <input type="hidden" name="search" value="{{ request('search') }}">
+            @endif
+
+            <!-- Apply Filters Button -->
+            <button type="submit" class="w-full bg-primary text-black py-3 rounded-lg font-bold hover:shadow-[0_0_20px_rgba(0,245,255,0.3)] transition-all">
+                Áp dụng bộ lọc
+            </button>
+
+            <!-- Reset Filters -->
+            <a href="{{ route('laptops.index') }}" class="block w-full text-center text-white/50 hover:text-white py-2 text-sm mt-2">
+                Xóa bộ lọc
+            </a>
+        </form>
     </aside>
 
     <!-- Content Area -->
@@ -56,13 +124,28 @@
         <div class="flex justify-between items-end mb-12">
             <div>
                 <h2 class="text-4xl font-headline font-bold mb-3 tracking-tight">Sản Phẩm Nổi Bật</h2>
-                <p class="text-white/40 text-sm">Tìm kiếm cỗ máy chiến tranh hoàn hảo của bạn</p>
+                <p class="text-white/40 text-sm">{{ $laptops->total() }} sản phẩm</p>
             </div>
             <div class="flex gap-4">
+                <!-- Sort Dropdown -->
+                <form action="{{ route('laptops.index') }}" method="GET" class="flex gap-2">
+                    @foreach(request()->except(['sort', 'page']) as $key => $value)
+                        <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                    @endforeach
+                    <select name="sort" onchange="this.form.submit()" class="bg-[#131313] border border-white/10 rounded-lg px-4 py-2 text-sm text-white focus:outline-none focus:border-primary/50">
+                        <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Mới nhất</option>
+                        <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Giá thấp → cao</option>
+                        <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Giá cao → thấp</option>
+                        <option value="name_asc" {{ request('sort') == 'name_asc' ? 'selected' : '' }}>Tên A → Z</option>
+                        <option value="name_desc" {{ request('sort') == 'name_desc' ? 'selected' : '' }}>Tên Z → A</option>
+                    </select>
+                </form>
+                
+                <!-- Search Form -->
                 <form action="{{ route('laptops.index') }}" method="GET" class="hidden md:block">
-                    @if(request('category'))
-                        <input type="hidden" name="category" value="{{ request('category') }}">
-                    @endif
+                    @foreach(request()->except(['search', 'page']) as $key => $value)
+                        <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                    @endforeach
                     <div class="flex gap-2">
                         <input type="text" name="search" value="{{ request('search') }}" placeholder="Tìm kiếm..." class="bg-[#131313] border border-white/10 rounded-full px-4 py-2 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-primary/50">
                         <button type="submit" class="bg-primary text-black px-6 py-2 rounded-full text-xs font-bold hover:shadow-[0_0_20px_rgba(0,245,255,0.3)] transition-all">
