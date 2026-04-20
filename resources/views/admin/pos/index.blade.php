@@ -141,21 +141,77 @@
                 </button>
             </div>
             <form id="checkoutForm" class="p-6 space-y-4 bg-neutral-900">
+                <input type="hidden" name="customer_id" id="selectedCustomerId">
+                
+                <!-- Customer Selection -->
+                <div>
+                    <label class="block text-xs text-cyan-400 uppercase font-bold mb-2">Chọn khách hàng</label>
+                    <div class="flex gap-2">
+                        <div class="flex-1 relative">
+                            <input type="text" id="customerSearch" placeholder="Tìm theo tên, email, SĐT..." class="w-full bg-neutral-800 border border-neutral-700 rounded-lg px-4 py-2.5 text-white text-sm focus:ring-1 focus:ring-cyan-400 focus:border-cyan-400" onkeyup="searchCustomers()">
+                            <span class="material-symbols-outlined absolute right-3 top-2.5 text-neutral-400 text-sm">search</span>
+                            
+                            <!-- Customer dropdown -->
+                            <div id="customerDropdown" class="hidden absolute z-50 w-full mt-1 bg-neutral-800 border border-neutral-700 rounded-lg shadow-xl max-h-60 overflow-y-auto">
+                                @foreach($customers ?? [] as $customer)
+                                <div class="customer-item px-4 py-3 hover:bg-neutral-700 cursor-pointer border-b border-neutral-700/50 last:border-0" 
+                                     data-id="{{ $customer->id }}"
+                                     data-name="{{ $customer->name }}"
+                                     data-email="{{ $customer->email }}"
+                                     data-phone="{{ $customer->phone }}"
+                                     data-address="{{ $customer->address }}"
+                                     data-tier="{{ $customer->tier }}"
+                                     onclick="selectCustomer(this)">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <div class="text-white font-medium text-sm">{{ $customer->name }}</div>
+                                            <div class="text-neutral-400 text-xs">{{ $customer->email }} • {{ $customer->phone }}</div>
+                                        </div>
+                                        <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase
+                                            @if($customer->tier === 'platinum') bg-purple-500/20 text-purple-400
+                                            @elseif($customer->tier === 'gold') bg-yellow-500/20 text-yellow-400
+                                            @elseif($customer->tier === 'silver') bg-gray-400/20 text-gray-300
+                                            @else bg-orange-500/20 text-orange-400
+                                            @endif">
+                                            {{ $customer->tier }}
+                                        </span>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        <button type="button" onclick="clearCustomerSelection()" class="px-4 py-2 bg-neutral-800 hover:bg-neutral-700 text-neutral-400 hover:text-white rounded-lg text-sm font-bold transition-colors">
+                            <span class="material-symbols-outlined text-sm">person_add</span>
+                        </button>
+                    </div>
+                    <div id="selectedCustomerInfo" class="hidden mt-2 p-3 bg-cyan-500/10 border border-cyan-500/20 rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-cyan-400 text-sm">check_circle</span>
+                                <span class="text-cyan-400 text-xs font-bold" id="selectedCustomerName"></span>
+                            </div>
+                            <button type="button" onclick="clearCustomerSelection()" class="text-cyan-400 hover:text-cyan-300">
+                                <span class="material-symbols-outlined text-sm">close</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 <div>
                     <label class="block text-xs text-cyan-400 uppercase font-bold mb-2">Tên khách hàng *</label>
-                    <input type="text" name="customer_name" required class="w-full bg-neutral-800 border border-neutral-700 rounded-lg px-4 py-2.5 text-white focus:ring-1 focus:ring-cyan-400 focus:border-cyan-400">
+                    <input type="text" name="customer_name" id="customerName" required class="w-full bg-neutral-800 border border-neutral-700 rounded-lg px-4 py-2.5 text-white focus:ring-1 focus:ring-cyan-400 focus:border-cyan-400">
                 </div>
                 <div>
                     <label class="block text-xs text-cyan-400 uppercase font-bold mb-2">Email *</label>
-                    <input type="email" name="customer_email" required class="w-full bg-neutral-800 border border-neutral-700 rounded-lg px-4 py-2.5 text-white focus:ring-1 focus:ring-cyan-400 focus:border-cyan-400">
+                    <input type="email" name="customer_email" id="customerEmail" required class="w-full bg-neutral-800 border border-neutral-700 rounded-lg px-4 py-2.5 text-white focus:ring-1 focus:ring-cyan-400 focus:border-cyan-400">
                 </div>
                 <div>
                     <label class="block text-xs text-cyan-400 uppercase font-bold mb-2">Số điện thoại *</label>
-                    <input type="tel" name="customer_phone" required class="w-full bg-neutral-800 border border-neutral-700 rounded-lg px-4 py-2.5 text-white focus:ring-1 focus:ring-cyan-400 focus:border-cyan-400">
+                    <input type="tel" name="customer_phone" id="customerPhone" required class="w-full bg-neutral-800 border border-neutral-700 rounded-lg px-4 py-2.5 text-white focus:ring-1 focus:ring-cyan-400 focus:border-cyan-400">
                 </div>
                 <div>
                     <label class="block text-xs text-cyan-400 uppercase font-bold mb-2">Địa chỉ</label>
-                    <textarea name="customer_address" rows="2" class="w-full bg-neutral-800 border border-neutral-700 rounded-lg px-4 py-2.5 text-white focus:ring-1 focus:ring-cyan-400 focus:border-cyan-400"></textarea>
+                    <textarea name="customer_address" id="customerAddress" rows="2" class="w-full bg-neutral-800 border border-neutral-700 rounded-lg px-4 py-2.5 text-white focus:ring-1 focus:ring-cyan-400 focus:border-cyan-400"></textarea>
                 </div>
                 <div>
                     <label class="block text-xs text-cyan-400 uppercase font-bold mb-2">Phương thức thanh toán *</label>
@@ -175,6 +231,113 @@
     <script>
         let cart = [];
         let appliedPromo = null;
+        let allCustomers = @json($customers ?? []);
+
+        function searchCustomers() {
+            const search = document.getElementById('customerSearch').value.toLowerCase();
+            const dropdown = document.getElementById('customerDropdown');
+            
+            if (search.length === 0) {
+                dropdown.classList.add('hidden');
+                return;
+            }
+
+            const filtered = allCustomers.filter(customer => 
+                customer.name.toLowerCase().includes(search) ||
+                customer.email.toLowerCase().includes(search) ||
+                (customer.phone && customer.phone.includes(search))
+            );
+
+            if (filtered.length > 0) {
+                dropdown.innerHTML = filtered.map(customer => `
+                    <div class="customer-item px-4 py-3 hover:bg-neutral-700 cursor-pointer border-b border-neutral-700/50 last:border-0" 
+                         data-id="${customer.id}"
+                         data-name="${customer.name}"
+                         data-email="${customer.email}"
+                         data-phone="${customer.phone || ''}"
+                         data-address="${customer.address || ''}"
+                         data-tier="${customer.tier}"
+                         onclick="selectCustomer(this)">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="text-white font-medium text-sm">${customer.name}</div>
+                                <div class="text-neutral-400 text-xs">${customer.email} • ${customer.phone || 'N/A'}</div>
+                            </div>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase ${getTierClass(customer.tier)}">
+                                ${customer.tier}
+                            </span>
+                        </div>
+                    </div>
+                `).join('');
+                dropdown.classList.remove('hidden');
+            } else {
+                dropdown.innerHTML = '<div class="px-4 py-3 text-neutral-400 text-sm text-center">Không tìm thấy khách hàng</div>';
+                dropdown.classList.remove('hidden');
+            }
+        }
+
+        function getTierClass(tier) {
+            const classes = {
+                'platinum': 'bg-purple-500/20 text-purple-400',
+                'gold': 'bg-yellow-500/20 text-yellow-400',
+                'silver': 'bg-gray-400/20 text-gray-300',
+                'bronze': 'bg-orange-500/20 text-orange-400'
+            };
+            return classes[tier] || classes['bronze'];
+        }
+
+        function selectCustomer(element) {
+            const customerId = element.dataset.id;
+            const customerName = element.dataset.name;
+            const customerEmail = element.dataset.email;
+            const customerPhone = element.dataset.phone;
+            const customerAddress = element.dataset.address;
+
+            // Fill form fields
+            document.getElementById('selectedCustomerId').value = customerId;
+            document.getElementById('customerName').value = customerName;
+            document.getElementById('customerEmail').value = customerEmail;
+            document.getElementById('customerPhone').value = customerPhone;
+            document.getElementById('customerAddress').value = customerAddress;
+
+            // Show selected customer info
+            document.getElementById('selectedCustomerName').textContent = customerName;
+            document.getElementById('selectedCustomerInfo').classList.remove('hidden');
+
+            // Hide dropdown and clear search
+            document.getElementById('customerDropdown').classList.add('hidden');
+            document.getElementById('customerSearch').value = customerName;
+
+            // Make fields readonly
+            document.getElementById('customerName').readOnly = true;
+            document.getElementById('customerEmail').readOnly = true;
+            document.getElementById('customerPhone').readOnly = true;
+        }
+
+        function clearCustomerSelection() {
+            document.getElementById('selectedCustomerId').value = '';
+            document.getElementById('customerName').value = '';
+            document.getElementById('customerEmail').value = '';
+            document.getElementById('customerPhone').value = '';
+            document.getElementById('customerAddress').value = '';
+            document.getElementById('customerSearch').value = '';
+            document.getElementById('selectedCustomerInfo').classList.add('hidden');
+            document.getElementById('customerDropdown').classList.add('hidden');
+
+            // Make fields editable again
+            document.getElementById('customerName').readOnly = false;
+            document.getElementById('customerEmail').readOnly = false;
+            document.getElementById('customerPhone').readOnly = false;
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('customerDropdown');
+            const searchInput = document.getElementById('customerSearch');
+            if (!dropdown.contains(event.target) && event.target !== searchInput) {
+                dropdown.classList.add('hidden');
+            }
+        });
 
         function addToCart(product) {
             const existingItem = cart.find(item => item.id === product.id);
@@ -418,6 +581,7 @@
             
             const data = {
                 items: cart,
+                customer_id: document.getElementById('selectedCustomerId').value || null,
                 customer_name: formData.get('customer_name'),
                 customer_email: formData.get('customer_email'),
                 customer_phone: formData.get('customer_phone'),
@@ -447,6 +611,7 @@
                     document.getElementById('promoCode').value = '';
                     document.getElementById('promoMessage').classList.add('hidden');
                     document.getElementById('discountRow').style.display = 'none';
+                    clearCustomerSelection();
                     updateCart();
                     closeCheckoutModal();
                     e.target.reset();

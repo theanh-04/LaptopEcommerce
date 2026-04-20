@@ -10,7 +10,7 @@ class LaptopController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Laptop::with(['category', 'brand']);
+        $query = Laptop::with('category');
         
         // Search by name
         if ($request->has('search') && $request->search) {
@@ -24,9 +24,9 @@ class LaptopController extends Controller
             });
         }
         
-        // Filter by brand
+        // Filter by brand (brand is a string field, not relationship)
         if ($request->has('brand') && $request->brand) {
-            $query->where('brand_id', $request->brand);
+            $query->where('brand', $request->brand);
         }
         
         // Filter by price range
