@@ -1,0 +1,389 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36" version="29.6.1">
+  <diagram name="Site Map - NEON KINETIC" id="sitemap-horizontal">
+    <mxGraphModel dx="1426" dy="777" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1800" pageHeight="800" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="root" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fontStyle=1;fillColor=#1ba1e2;strokeColor=#006EAF;fontColor=#ffffff;strokeWidth=2;" value="NEON KINETIC&#xa;Laptop E-commerce" vertex="1">
+          <mxGeometry height="60" width="300" x="600" y="38" as="geometry" />
+        </mxCell>
+        <mxCell id="home" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fontStyle=1;fillColor=#1ba1e2;strokeColor=#006EAF;fontColor=#ffffff;" value="Trang chủ" vertex="1">
+          <mxGeometry height="50" width="140" x="80" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="products" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fontStyle=1;fillColor=#1ba1e2;strokeColor=#006EAF;fontColor=#ffffff;" value="Sản phẩm" vertex="1">
+          <mxGeometry height="50" width="140" x="280" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="cart" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fontStyle=1;fillColor=#1ba1e2;strokeColor=#006EAF;fontColor=#ffffff;" value="Giỏ hàng" vertex="1">
+          <mxGeometry height="50" width="140" x="480" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="account" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fontStyle=1;fillColor=#1ba1e2;strokeColor=#006EAF;fontColor=#ffffff;" value="Tài khoản" vertex="1">
+          <mxGeometry height="50" width="140" x="680" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="orders" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fontStyle=1;fillColor=#1ba1e2;strokeColor=#006EAF;fontColor=#ffffff;" value="Đơn hàng" vertex="1">
+          <mxGeometry height="50" width="140" x="880" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="admin" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fontStyle=1;fillColor=#1ba1e2;strokeColor=#006EAF;fontColor=#ffffff;" value="Quản trị" vertex="1">
+          <mxGeometry height="50" width="140" x="1080" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="auth" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fontStyle=1;fillColor=#1ba1e2;strokeColor=#006EAF;fontColor=#ffffff;" value="Xác thực" vertex="1">
+          <mxGeometry height="50" width="140" x="1280" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="xwB5XDET6ISRrElaVRdy-1" edge="1" parent="1" source="prod-list" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=15;" target="prod-filter" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="240" y="300" />
+              <mxPoint x="240" y="420" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="prod-list" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fillColor=#f5f5f5;strokeColor=#666666;" value="Danh sách laptop" vertex="1">
+          <mxGeometry height="40" width="140" x="280" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="prod-detail" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fillColor=#f5f5f5;strokeColor=#666666;" value="Chi tiết sản phẩm" vertex="1">
+          <mxGeometry height="40" width="140" x="280" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="prod-filter" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fillColor=#f5f5f5;strokeColor=#666666;" value="Lọc và tìm kiếm" vertex="1">
+          <mxGeometry height="40" width="140" x="280" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="prod-category" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fillColor=#f5f5f5;strokeColor=#666666;" value="Theo danh mục" vertex="1">
+          <mxGeometry height="40" width="140" x="280" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="prod-brand" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fillColor=#f5f5f5;strokeColor=#666666;" value="Theo thương hiệu" vertex="1">
+          <mxGeometry height="40" width="140" x="280" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="cart-view" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fillColor=#f5f5f5;strokeColor=#666666;" value="Xem giỏ hàng" vertex="1">
+          <mxGeometry height="40" width="140" x="480" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="cart-checkout" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fillColor=#f5f5f5;strokeColor=#666666;" value="Thanh toán" vertex="1">
+          <mxGeometry height="40" width="140" x="480" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="cart-promo" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fillColor=#f5f5f5;strokeColor=#666666;" value="Áp dụng khuyến mãi" vertex="1">
+          <mxGeometry height="40" width="140" x="480" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="acc-profile" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fillColor=#f5f5f5;strokeColor=#666666;" value="Thông tin cá nhân" vertex="1">
+          <mxGeometry height="40" width="140" x="680" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="acc-edit" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fillColor=#f5f5f5;strokeColor=#666666;" value="Chỉnh sửa profile" vertex="1">
+          <mxGeometry height="40" width="140" x="680" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="acc-password" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fillColor=#f5f5f5;strokeColor=#666666;" value="Đổi mật khẩu" vertex="1">
+          <mxGeometry height="40" width="140" x="680" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="ord-history" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fillColor=#f5f5f5;strokeColor=#666666;" value="Lịch sử đơn hàng" vertex="1">
+          <mxGeometry height="40" width="140" x="880" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="ord-detail" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fillColor=#f5f5f5;strokeColor=#666666;" value="Chi tiết đơn hàng" vertex="1">
+          <mxGeometry height="40" width="140" x="880" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="ord-success" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fillColor=#f5f5f5;strokeColor=#666666;" value="Đặt hàng thành công" vertex="1">
+          <mxGeometry height="40" width="140" x="880" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="adm-dashboard" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fillColor=#f5f5f5;strokeColor=#666666;" value="Dashboard" vertex="1">
+          <mxGeometry height="40" width="140" x="1080" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="adm-inventory" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fillColor=#f5f5f5;strokeColor=#666666;" value="Quản lý sản phẩm" vertex="1">
+          <mxGeometry height="40" width="140" x="1080" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="adm-orders" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fillColor=#f5f5f5;strokeColor=#666666;" value="Quản lý đơn hàng" vertex="1">
+          <mxGeometry height="40" width="140" x="1080" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="adm-employees" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fillColor=#f5f5f5;strokeColor=#666666;" value="Quản lý nhân viên" vertex="1">
+          <mxGeometry height="40" width="140" x="1080" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="adm-customers" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fillColor=#f5f5f5;strokeColor=#666666;" value="Quản lý khách hàng" vertex="1">
+          <mxGeometry height="40" width="140" x="1080" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="adm-brands" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fillColor=#f5f5f5;strokeColor=#666666;" value="Quản lý thương hiệu" vertex="1">
+          <mxGeometry height="40" width="140" x="1080" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="adm-promotions" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fillColor=#f5f5f5;strokeColor=#666666;" value="Quản lý khuyến mãi" vertex="1">
+          <mxGeometry height="40" width="140" x="1080" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="adm-pos" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fillColor=#f5f5f5;strokeColor=#666666;" value="POS - Bán hàng" vertex="1">
+          <mxGeometry height="40" width="140" x="1080" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="adm-reports" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fillColor=#f5f5f5;strokeColor=#666666;" value="Báo cáo" vertex="1">
+          <mxGeometry height="40" width="140" x="1080" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="auth-login" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fillColor=#f5f5f5;strokeColor=#666666;" value="Đăng nhập" vertex="1">
+          <mxGeometry height="40" width="140" x="1280" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="auth-register" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fillColor=#f5f5f5;strokeColor=#666666;" value="Đăng ký" vertex="1">
+          <mxGeometry height="40" width="140" x="1280" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="auth-logout" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fillColor=#f5f5f5;strokeColor=#666666;" value="Đăng xuất" vertex="1">
+          <mxGeometry height="40" width="140" x="1280" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="hline-main" edge="1" parent="1" style="endArrow=none;html=1;strokeWidth=2;strokeColor=#006EAF;fontSize=15;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="150" y="150" as="sourcePoint" />
+            <mxPoint x="1350" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-root" edge="1" parent="1" source="root" style="endArrow=none;html=1;strokeWidth=2;strokeColor=#006EAF;fontSize=15;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="100" as="sourcePoint" />
+            <mxPoint x="750" y="153" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-home" edge="1" parent="1" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#006EAF;fontSize=15;" target="home" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="150" y="150" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-products" edge="1" parent="1" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#006EAF;fontSize=15;" target="products" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="350" y="150" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-cart" edge="1" parent="1" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#006EAF;fontSize=15;" target="cart" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="550" y="150" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-account" edge="1" parent="1" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#006EAF;fontSize=15;" target="account" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="750" y="150" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-orders" edge="1" parent="1" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#006EAF;fontSize=15;" target="orders" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="150" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-admin" edge="1" parent="1" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#006EAF;fontSize=15;" target="admin" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1150" y="150" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-auth" edge="1" parent="1" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#006EAF;fontSize=15;" target="auth" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1350" y="150" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-prod-1" edge="1" parent="1" source="products" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#666666;edgeStyle=orthogonalEdgeStyle;fontSize=15;" target="prod-list" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="240" y="205" />
+              <mxPoint x="240" y="300.0000000000002" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-prod-2" edge="1" parent="1" source="products" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#666666;edgeStyle=orthogonalEdgeStyle;fontSize=15;" target="prod-detail" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="240" y="205" />
+              <mxPoint x="240" y="359.9999999999998" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-prod-3" edge="1" parent="1" source="products" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#666666;edgeStyle=orthogonalEdgeStyle;fontSize=15;" target="prod-filter" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="240" y="205" />
+              <mxPoint x="240" y="419.9999999999998" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-prod-4" edge="1" parent="1" source="products" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#666666;edgeStyle=orthogonalEdgeStyle;fontSize=15;" target="prod-category" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="240" y="205" />
+              <mxPoint x="240" y="479.9999999999998" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-prod-5" edge="1" parent="1" source="products" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#666666;edgeStyle=orthogonalEdgeStyle;fontSize=15;" target="prod-brand" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="240" y="205" />
+              <mxPoint x="240" y="539.9999999999998" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-cart-1" edge="1" parent="1" source="cart" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#666666;edgeStyle=orthogonalEdgeStyle;fontSize=15;" target="cart-view" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="450" y="205" />
+              <mxPoint x="450" y="300" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-cart-2" edge="1" parent="1" source="cart" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#666666;edgeStyle=orthogonalEdgeStyle;fontSize=15;" target="cart-checkout" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="450" y="205" />
+              <mxPoint x="450" y="360" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-cart-3" edge="1" parent="1" source="cart" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#666666;edgeStyle=orthogonalEdgeStyle;fontSize=15;" target="cart-promo" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="450" y="205" />
+              <mxPoint x="450" y="420" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-acc-1" edge="1" parent="1" source="account" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#666666;edgeStyle=orthogonalEdgeStyle;fontSize=15;" target="acc-profile" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="660" y="205" />
+              <mxPoint x="660" y="300" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-acc-2" edge="1" parent="1" source="account" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#666666;edgeStyle=orthogonalEdgeStyle;fontSize=15;" target="acc-edit" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="660" y="205" />
+              <mxPoint x="660" y="360" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-acc-3" edge="1" parent="1" source="account" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#666666;edgeStyle=orthogonalEdgeStyle;fontSize=15;" target="acc-password" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="660" y="205" />
+              <mxPoint x="660" y="420" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-ord-1" edge="1" parent="1" source="orders" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#666666;edgeStyle=orthogonalEdgeStyle;fontSize=15;" target="ord-history" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="860" y="205" />
+              <mxPoint x="860" y="300" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-ord-2" edge="1" parent="1" source="orders" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#666666;edgeStyle=orthogonalEdgeStyle;fontSize=15;" target="ord-detail" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="860" y="205" />
+              <mxPoint x="860" y="360" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-ord-3" edge="1" parent="1" source="orders" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#666666;edgeStyle=orthogonalEdgeStyle;fontSize=15;" target="ord-success" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="860" y="205" />
+              <mxPoint x="860" y="420" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-adm-1" edge="1" parent="1" source="admin" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#666666;edgeStyle=orthogonalEdgeStyle;fontSize=15;" target="adm-dashboard" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1050" y="205" />
+              <mxPoint x="1050" y="300" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-adm-2" edge="1" parent="1" source="admin" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#666666;edgeStyle=orthogonalEdgeStyle;fontSize=15;" target="adm-inventory" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1050" y="205" />
+              <mxPoint x="1050" y="360" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-adm-3" edge="1" parent="1" source="admin" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#666666;edgeStyle=orthogonalEdgeStyle;fontSize=15;" target="adm-orders" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1050" y="205" />
+              <mxPoint x="1050" y="420" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-adm-4" edge="1" parent="1" source="admin" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#666666;edgeStyle=orthogonalEdgeStyle;fontSize=15;" target="adm-employees" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1050" y="205" />
+              <mxPoint x="1050" y="480" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-adm-5" edge="1" parent="1" source="admin" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#666666;edgeStyle=orthogonalEdgeStyle;fontSize=15;" target="adm-customers" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1050" y="205" />
+              <mxPoint x="1050" y="540" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-adm-6" edge="1" parent="1" source="admin" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#666666;edgeStyle=orthogonalEdgeStyle;fontSize=15;" target="adm-brands" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1050" y="205" />
+              <mxPoint x="1050" y="600" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-adm-7" edge="1" parent="1" source="admin" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#666666;edgeStyle=orthogonalEdgeStyle;fontSize=15;" target="adm-promotions" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1050" y="205" />
+              <mxPoint x="1050" y="660" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-adm-8" edge="1" parent="1" source="admin" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#666666;edgeStyle=orthogonalEdgeStyle;fontSize=15;" target="adm-pos" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1050" y="205" />
+              <mxPoint x="1050" y="720.0000000000002" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-adm-9" edge="1" parent="1" source="admin" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#666666;edgeStyle=orthogonalEdgeStyle;fontSize=15;" target="adm-reports" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1050" y="205" />
+              <mxPoint x="1050" y="780.0000000000002" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-auth-1" edge="1" parent="1" source="auth" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#666666;edgeStyle=orthogonalEdgeStyle;fontSize=15;" target="auth-login" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1260" y="205" />
+              <mxPoint x="1260" y="300" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-auth-2" edge="1" parent="1" source="auth" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#666666;edgeStyle=orthogonalEdgeStyle;fontSize=15;" target="auth-register" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1260" y="205" />
+              <mxPoint x="1260" y="360" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vline-auth-3" edge="1" parent="1" source="auth" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#666666;edgeStyle=orthogonalEdgeStyle;fontSize=15;" target="auth-logout" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1260" y="205" />
+              <mxPoint x="1260" y="420" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="xwB5XDET6ISRrElaVRdy-2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fillColor=#f5f5f5;strokeColor=#666666;" value="Danh mục sản phẩm" vertex="1">
+          <mxGeometry height="40" width="140" x="85" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="xwB5XDET6ISRrElaVRdy-4" edge="1" parent="1" source="home" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#666666;edgeStyle=orthogonalEdgeStyle;exitX=0;exitY=0.5;exitDx=0;exitDy=0;fontSize=15;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="80" y="214" />
+              <mxPoint x="69" y="214" />
+              <mxPoint x="69" y="309" />
+            </Array>
+            <mxPoint x="85" y="214" as="sourcePoint" />
+            <mxPoint x="85" y="309" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

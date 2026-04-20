@@ -1,0 +1,171 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0" version="29.6.1">
+  <diagram name="User Stories - NEON KINETIC" id="user-stories">
+    <mxGraphModel dx="2200" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="2400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- Title -->
+        <mxCell id="title" value="USER STORIES - HỆ THỐNG NEON KINETIC" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="40" width="800" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- Section 1: Khách hàng -->
+        <mxCell id="section1-title" value="1. KHÁCH HÀNG (CUSTOMER)" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;fontStyle=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;" vertex="1" parent="1">
+          <mxGeometry x="100" y="120" width="1400" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- Subsection 1.1 -->
+        <mxCell id="subsection1-1" value="1.1 Xem và Tìm kiếm Sản phẩm" style="rounded=0;whiteSpace=wrap;html=1;fontSize=14;fontStyle=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;" vertex="1" parent="1">
+          <mxGeometry x="100" y="180" width="1400" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- Table Header -->
+        <mxCell id="header1-1" value="ID" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;fontStyle=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="100" y="220" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="header1-2" value="User Story" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;fontStyle=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="180" y="220" width="600" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="header1-3" value="Acceptance Criteria" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;fontStyle=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="780" y="220" width="620" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="header1-4" value="Priority" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;fontStyle=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="220" width="100" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- US-01 -->
+        <mxCell id="us01-id" value="US-01" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;fillColor=#ffffff;strokeColor=#666666;align=center;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="260" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="us01-story" value="Là khách hàng, tôi muốn xem danh sách sản phẩm laptop, để tìm kiếm sản phẩm phù hợp với nhu cầu của mình" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;fillColor=#ffffff;strokeColor=#666666;align=left;verticalAlign=top;spacingLeft=5;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="180" y="260" width="600" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="us01-criteria" value="• Hiển thị danh sách sản phẩm dạng grid&#xa;• Mỗi sản phẩm hiển thị: ảnh, tên, giá, trạng thái còn hàng&#xa;• Phân trang 12 sản phẩm/trang" style="rounded=0;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#666666;align=left;verticalAlign=top;spacingLeft=5;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="780" y="260" width="620" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="us01-priority" value="HIGH" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;fillColor=#f8cecc;strokeColor=#b85450;align=center;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="260" width="100" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- US-02 -->
+        <mxCell id="us02-id" value="US-02" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;fillColor=#ffffff;strokeColor=#666666;align=center;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="340" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="us02-story" value="Là khách hàng, tôi muốn tìm kiếm sản phẩm theo tên, để nhanh chóng tìm được sản phẩm mong muốn" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;fillColor=#ffffff;strokeColor=#666666;align=left;verticalAlign=top;spacingLeft=5;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="180" y="340" width="600" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="us02-criteria" value="• Có ô tìm kiếm ở header&#xa;• Tìm kiếm theo tên sản phẩm&#xa;• Hiển thị kết quả real-time" style="rounded=0;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#666666;align=left;verticalAlign=top;spacingLeft=5;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="780" y="340" width="620" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="us02-priority" value="HIGH" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;fillColor=#f8cecc;strokeColor=#b85450;align=center;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="340" width="100" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- US-03 -->
+        <mxCell id="us03-id" value="US-03" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;fillColor=#ffffff;strokeColor=#666666;align=center;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="420" width="80" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="us03-story" value="Là khách hàng, tôi muốn lọc sản phẩm theo nhiều tiêu chí (giá, brand, CPU, RAM, Storage), để thu hẹp kết quả tìm kiếm" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;fillColor=#ffffff;strokeColor=#666666;align=left;verticalAlign=top;spacingLeft=5;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="180" y="420" width="600" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="us03-criteria" value="• Bộ lọc ở sidebar&#xa;• Lọc theo: danh mục, thương hiệu, khoảng giá, CPU, RAM, Storage&#xa;• Có thể kết hợp nhiều bộ lọc&#xa;• Nút &quot;Xóa bộ lọc&quot;" style="rounded=0;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#666666;align=left;verticalAlign=top;spacingLeft=5;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="780" y="420" width="620" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="us03-priority" value="HIGH" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;fillColor=#f8cecc;strokeColor=#b85450;align=center;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="420" width="100" height="100" as="geometry" />
+        </mxCell>
+        
+        <!-- US-04 -->
+        <mxCell id="us04-id" value="US-04" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;fillColor=#ffffff;strokeColor=#666666;align=center;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="520" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="us04-story" value="Là khách hàng, tôi muốn sắp xếp sản phẩm theo giá, tên, mới nhất, để xem sản phẩm theo thứ tự mong muốn" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;fillColor=#ffffff;strokeColor=#666666;align=left;verticalAlign=top;spacingLeft=5;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="180" y="520" width="600" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="us04-criteria" value="• Dropdown sắp xếp&#xa;• Các tùy chọn: Mới nhất, Giá thấp→cao, Giá cao→thấp, Tên A→Z, Tên Z→A" style="rounded=0;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#666666;align=left;verticalAlign=top;spacingLeft=5;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="780" y="520" width="620" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="us04-priority" value="MEDIUM" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;fillColor=#fff2cc;strokeColor=#d6b656;align=center;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="520" width="100" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- US-05 -->
+        <mxCell id="us05-id" value="US-05" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;fillColor=#ffffff;strokeColor=#666666;align=center;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="600" width="80" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="us05-story" value="Là khách hàng, tôi muốn xem chi tiết sản phẩm, để biết đầy đủ thông tin về cấu hình và giá" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;fillColor=#ffffff;strokeColor=#666666;align=left;verticalAlign=top;spacingLeft=5;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="180" y="600" width="600" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="us05-criteria" value="• Hiển thị: ảnh lớn, tên, giá, mô tả chi tiết&#xa;• Thông số kỹ thuật: CPU, RAM, Storage, Display, Graphics&#xa;• Trạng thái tồn kho&#xa;• Nút &quot;Thêm vào giỏ hàng&quot;" style="rounded=0;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#666666;align=left;verticalAlign=top;spacingLeft=5;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="780" y="600" width="620" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="us05-priority" value="HIGH" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;fillColor=#f8cecc;strokeColor=#b85450;align=center;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="600" width="100" height="100" as="geometry" />
+        </mxCell>
+        
+        <!-- Subsection 1.2 -->
+        <mxCell id="subsection1-2" value="1.2 Giỏ hàng và Đặt hàng" style="rounded=0;whiteSpace=wrap;html=1;fontSize=14;fontStyle=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;" vertex="1" parent="1">
+          <mxGeometry x="100" y="730" width="1400" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- Table Header 2 -->
+        <mxCell id="header2-1" value="ID" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;fontStyle=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="100" y="770" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="header2-2" value="User Story" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;fontStyle=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="180" y="770" width="600" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="header2-3" value="Acceptance Criteria" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;fontStyle=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="780" y="770" width="620" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="header2-4" value="Priority" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;fontStyle=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="770" width="100" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- US-06 -->
+        <mxCell id="us06-id" value="US-06" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;fillColor=#ffffff;strokeColor=#666666;align=center;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="810" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="us06-story" value="Là khách hàng, tôi muốn thêm sản phẩm vào giỏ hàng, để lưu lại sản phẩm muốn mua" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;fillColor=#ffffff;strokeColor=#666666;align=left;verticalAlign=top;spacingLeft=5;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="180" y="810" width="600" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="us06-criteria" value="• Nút &quot;Thêm vào giỏ&quot; ở trang chi tiết&#xa;• Hiển thị số lượng sản phẩm trong giỏ ở header&#xa;• Thông báo thành công khi thêm" style="rounded=0;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#666666;align=left;verticalAlign=top;spacingLeft=5;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="780" y="810" width="620" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="us06-priority" value="HIGH" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;fillColor=#f8cecc;strokeColor=#b85450;align=center;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="810" width="100" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Note at bottom -->
+        <mxCell id="note" value="Ghi chú: Tài liệu đầy đủ 33 User Stories có trong file docs/USER_STORIES.md&#xa;Đây là mẫu minh họa 6 User Stories đầu tiên" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;fillColor=#ffe6cc;strokeColor=#d79b00;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="100" y="920" width="1400" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- Legend -->
+        <mxCell id="legend-title" value="LEGEND (Chú thích)" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;fontStyle=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;" vertex="1" parent="1">
+          <mxGeometry x="100" y="1010" width="400" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-high" value="HIGH" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;fillColor=#f8cecc;strokeColor=#b85450;align=center;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="1040" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-high-text" value="Ưu tiên cao - Tính năng cốt lõi" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="210" y="1040" width="290" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-medium" value="MEDIUM" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;fillColor=#fff2cc;strokeColor=#d6b656;align=center;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="1070" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-medium-text" value="Ưu tiên trung bình - Tính năng quan trọng" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="210" y="1070" width="290" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-low" value="LOW" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;fillColor=#d5e8d4;strokeColor=#82b366;align=center;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="1100" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-low-text" value="Ưu tiên thấp - Tính năng bổ sung" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="210" y="1100" width="290" height="30" as="geometry" />
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

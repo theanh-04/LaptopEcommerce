@@ -1,0 +1,235 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36" version="29.6.1">
+  <diagram name="Site Map - NEON KINETIC" id="sitemap">
+    <mxGraphModel dx="1901" dy="1036" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2000" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;fontStyle=1;" value="SƠ ĐỒ SITE MAP - HỆ THỐNG NEON KINETIC" vertex="1">
+          <mxGeometry height="40" width="1000" x="500" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="root" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=16;fontStyle=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=3;" value="NEON KINETIC&#xa;(Trang chủ)" vertex="1">
+          <mxGeometry height="60" width="300" x="850" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="public" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;fontStyle=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;" value="PUBLIC&#xa;(Khách hàng)" vertex="1">
+          <mxGeometry height="60" width="200" x="300" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="admin" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;fontStyle=1;fillColor=#ffe6cc;strokeColor=#d79b00;strokeWidth=2;" value="ADMIN&#xa;(Quản trị viên)" vertex="1">
+          <mxGeometry height="60" width="200" x="1500" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="line-root-public" edge="1" parent="1" source="root" style="endArrow=classic;html=1;strokeWidth=2;" target="public">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line-root-admin" edge="1" parent="1" source="root" style="endArrow=classic;html=1;strokeWidth=2;" target="admin">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="pub-home" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;fillColor=#ffffff;strokeColor=#82b366;" value="Trang chủ&#xa;(/)" vertex="1">
+          <mxGeometry height="50" width="140" x="50" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="pub-laptops" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;fillColor=#ffffff;strokeColor=#82b366;" value="Danh sách SP&#xa;(/laptops)" vertex="1">
+          <mxGeometry height="50" width="140" x="210" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="pub-detail" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;fillColor=#ffffff;strokeColor=#82b366;" value="Chi tiết SP&#xa;(/laptops/{slug})" vertex="1">
+          <mxGeometry height="50" width="140" x="370" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="pub-cart" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;fillColor=#ffffff;strokeColor=#82b366;" value="Giỏ hàng&#xa;(/cart)" vertex="1">
+          <mxGeometry height="50" width="140" x="530" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="pub-checkout" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;fillColor=#ffffff;strokeColor=#82b366;" value="Thanh toán&#xa;(/checkout)" vertex="1">
+          <mxGeometry height="50" width="140" x="50" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="pub-success" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;fillColor=#ffffff;strokeColor=#82b366;" value="Đặt hàng thành công&#xa;(/order/success)" vertex="1">
+          <mxGeometry height="50" width="140" x="210" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="pub-login" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;fillColor=#ffffff;strokeColor=#82b366;" value="Đăng nhập&#xa;(/login)" vertex="1">
+          <mxGeometry height="50" width="140" x="370" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="pub-register" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;fillColor=#ffffff;strokeColor=#82b366;" value="Đăng ký&#xa;(/register)" vertex="1">
+          <mxGeometry height="50" width="140" x="530" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="pub-auth" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;fontStyle=1;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=2;" value="TÀI KHOẢN&#xa;(Auth required)" vertex="1">
+          <mxGeometry height="50" width="180" x="290" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="pub-profile" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#ffffff;strokeColor=#9673a6;" value="Profile&#xa;(/profile)" vertex="1">
+          <mxGeometry height="45" width="120" x="50" y="610" as="geometry" />
+        </mxCell>
+        <mxCell id="pub-profile-edit" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#ffffff;strokeColor=#9673a6;" value="Chỉnh sửa TT&#xa;(/profile/edit)" vertex="1">
+          <mxGeometry height="45" width="120" x="190" y="610" as="geometry" />
+        </mxCell>
+        <mxCell id="pub-change-pass" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#ffffff;strokeColor=#9673a6;" value="Đổi mật khẩu&#xa;(/profile/change-password)" vertex="1">
+          <mxGeometry height="45" width="140" x="330" y="610" as="geometry" />
+        </mxCell>
+        <mxCell id="pub-orders" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#ffffff;strokeColor=#9673a6;" value="Lịch sử đơn hàng&#xa;(/my-orders)" vertex="1">
+          <mxGeometry height="45" width="140" x="490" y="610" as="geometry" />
+        </mxCell>
+        <mxCell id="laptop-filter" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=10;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;" value="Lọc theo danh mục" vertex="1">
+          <mxGeometry height="25" width="140" x="210" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="laptop-brand" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=10;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;" value="Lọc theo thương hiệu" vertex="1">
+          <mxGeometry height="25" width="140" x="210" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="laptop-price" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=10;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;" value="Lọc theo giá" vertex="1">
+          <mxGeometry height="25" width="140" x="210" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="laptop-specs" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=10;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;" value="Lọc theo specs" vertex="1">
+          <mxGeometry height="25" width="140" x="210" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="laptop-sort" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=10;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;" value="Sắp xếp" vertex="1">
+          <mxGeometry height="25" width="140" x="210" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="adm-dashboard" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;fillColor=#ffffff;strokeColor=#d79b00;" value="Dashboard&#xa;(/admin/dashboard)" vertex="1">
+          <mxGeometry height="50" width="160" x="1200" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="adm-inventory" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;fillColor=#ffffff;strokeColor=#d79b00;" value="Quản lý SP&#xa;(/admin/inventory)" vertex="1">
+          <mxGeometry height="50" width="160" x="1380" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="adm-orders" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;fillColor=#ffffff;strokeColor=#d79b00;" value="Quản lý đơn hàng&#xa;(/admin/orders)" vertex="1">
+          <mxGeometry height="50" width="160" x="1560" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="adm-employees" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;fillColor=#ffffff;strokeColor=#d79b00;" value="Quản lý nhân viên&#xa;(/admin/employees)" vertex="1">
+          <mxGeometry height="50" width="160" x="1740" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="adm-customers" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;fillColor=#ffffff;strokeColor=#d79b00;" value="Quản lý khách hàng&#xa;(/admin/customers)" vertex="1">
+          <mxGeometry height="50" width="160" x="1200" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="adm-brands" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;fillColor=#ffffff;strokeColor=#d79b00;" value="Quản lý thương hiệu&#xa;(/admin/brands)" vertex="1">
+          <mxGeometry height="50" width="160" x="1380" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="adm-promotions" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;fillColor=#ffffff;strokeColor=#d79b00;" value="Quản lý khuyến mãi&#xa;(/admin/promotions)" vertex="1">
+          <mxGeometry height="50" width="160" x="1560" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="adm-pos" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;fillColor=#ffffff;strokeColor=#d79b00;" value="POS - Bán hàng&#xa;(/admin/pos)" vertex="1">
+          <mxGeometry height="50" width="160" x="1740" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="adm-reports" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;fillColor=#ffffff;strokeColor=#d79b00;" value="Báo cáo&#xa;(/admin/reports)" vertex="1">
+          <mxGeometry height="50" width="160" x="1600" y="570" as="geometry" />
+        </mxCell>
+        <mxCell id="inv-list" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=10;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;" value="Danh sách" vertex="1">
+          <mxGeometry height="20" width="160" x="1380" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="inv-create" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=10;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;" value="Thêm mới" vertex="1">
+          <mxGeometry height="20" width="160" x="1380" y="435" as="geometry" />
+        </mxCell>
+        <mxCell id="inv-edit" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=10;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;" value="Chỉnh sửa" vertex="1">
+          <mxGeometry height="20" width="160" x="1380" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="inv-delete" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=10;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;" value="Xóa" vertex="1">
+          <mxGeometry height="20" width="160" x="1380" y="485" as="geometry" />
+        </mxCell>
+        <mxCell id="ord-list" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=10;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;" value="Danh sách" vertex="1">
+          <mxGeometry height="20" width="160" x="1560" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="ord-detail" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=10;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;" value="Chi tiết" vertex="1">
+          <mxGeometry height="20" width="160" x="1560" y="435" as="geometry" />
+        </mxCell>
+        <mxCell id="ord-status" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=10;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;" value="Cập nhật trạng thái" vertex="1">
+          <mxGeometry height="20" width="160" x="1560" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="ord-assign" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=10;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;" value="Gán nhân viên" vertex="1">
+          <mxGeometry height="20" width="160" x="1560" y="485" as="geometry" />
+        </mxCell>
+        <mxCell id="ord-invoice" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=10;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;" value="In hóa đơn" vertex="1">
+          <mxGeometry height="20" width="160" x="1560" y="510" as="geometry" />
+        </mxCell>
+        <mxCell id="line-pub-1" edge="1" parent="1" source="public" style="endArrow=classic;html=1;" target="pub-home">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line-pub-2" edge="1" parent="1" source="public" style="endArrow=classic;html=1;" target="pub-laptops">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line-pub-3" edge="1" parent="1" source="public" style="endArrow=classic;html=1;" target="pub-detail">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line-pub-4" edge="1" parent="1" source="public" style="endArrow=classic;html=1;" target="pub-cart">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line-pub-5" edge="1" parent="1" source="public" style="endArrow=classic;html=1;" target="pub-checkout">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line-pub-6" edge="1" parent="1" source="public" style="endArrow=classic;html=1;" target="pub-success">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line-pub-7" edge="1" parent="1" source="public" style="endArrow=classic;html=1;" target="pub-login">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line-pub-8" edge="1" parent="1" source="public" style="endArrow=classic;html=1;" target="pub-register">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line-pub-9" edge="1" parent="1" source="public" style="endArrow=classic;html=1;strokeWidth=2;" target="pub-auth">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line-auth-1" edge="1" parent="1" source="pub-auth" style="endArrow=classic;html=1;" target="pub-profile">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line-auth-2" edge="1" parent="1" source="pub-auth" style="endArrow=classic;html=1;" target="pub-profile-edit">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line-auth-3" edge="1" parent="1" source="pub-auth" style="endArrow=classic;html=1;" target="pub-change-pass">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line-auth-4" edge="1" parent="1" source="pub-auth" style="endArrow=classic;html=1;" target="pub-orders">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line-adm-1" edge="1" parent="1" source="admin" style="endArrow=classic;html=1;" target="adm-dashboard">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line-adm-2" edge="1" parent="1" source="admin" style="endArrow=classic;html=1;" target="adm-inventory">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line-adm-3" edge="1" parent="1" source="admin" style="endArrow=classic;html=1;" target="adm-orders">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line-adm-4" edge="1" parent="1" source="admin" style="endArrow=classic;html=1;" target="adm-employees">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line-adm-5" edge="1" parent="1" source="admin" style="endArrow=classic;html=1;" target="adm-customers">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line-adm-6" edge="1" parent="1" source="admin" style="endArrow=classic;html=1;" target="adm-brands">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line-adm-7" edge="1" parent="1" source="admin" style="endArrow=classic;html=1;" target="adm-promotions">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line-adm-8" edge="1" parent="1" source="admin" style="endArrow=classic;html=1;" target="adm-pos">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line-adm-9" edge="1" parent="1" source="admin" style="endArrow=classic;html=1;" target="adm-reports">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-box" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#666666;strokeWidth=2;" value="" vertex="1">
+          <mxGeometry height="120" width="580" x="50" y="720" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;" value="CHÚ THÍCH (LEGEND)" vertex="1">
+          <mxGeometry height="30" width="200" x="70" y="730" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-public" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#d5e8d4;strokeColor=#82b366;" value="Public" vertex="1">
+          <mxGeometry height="30" width="100" x="70" y="770" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-public-text" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;" value="Trang công khai, khách vãng lai truy cập được" vertex="1">
+          <mxGeometry height="30" width="300" x="180" y="770" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-auth" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#e1d5e7;strokeColor=#9673a6;" value="Auth" vertex="1">
+          <mxGeometry height="30" width="100" x="70" y="805" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-auth-text" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;" value="Yêu cầu đăng nhập (Auth required)" vertex="1">
+          <mxGeometry height="30" width="300" x="180" y="805" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-admin" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#ffe6cc;strokeColor=#d79b00;" value="Admin" vertex="1">
+          <mxGeometry height="30" width="100" x="70" y="840" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-admin-text" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;" value="Chỉ Admin truy cập, có middleware kiểm tra role" vertex="1">
+          <mxGeometry height="30" width="300" x="180" y="840" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-sub" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=10;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;" value="Sub-page" vertex="1">
+          <mxGeometry height="25" width="100" x="70" y="875" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-sub-text" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;" value="Trang con / Tính năng phụ" vertex="1">
+          <mxGeometry height="25" width="300" x="180" y="875" as="geometry" />
+        </mxCell>
+        <mxCell id="note" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;" value="Ghi chú:&#xa;• Tất cả trang Admin yêu cầu đăng nhập với role = &#39;admin&#39;&#xa;• Trang Auth required yêu cầu đăng nhập với bất kỳ role nào&#xa;• Các sub-page (dashed) là tính năng trong trang chính" vertex="1">
+          <mxGeometry height="120" width="500" x="700" y="720" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
